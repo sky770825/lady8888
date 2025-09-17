@@ -507,19 +507,109 @@ echo 🚀 自動初始化 Git 倉庫
 echo ================================
 echo.
 
-echo 正在啟動自動化 Git 初始化工具...
+echo 正在自動初始化 Git 倉庫...
 echo.
 
-if exist "auto-init-git.bat" (
-    call auto-init-git.bat
-) else (
-    echo ❌ 找不到 auto-init-git.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
+echo 步驟1: 檢查是否已初始化 Git...
+if exist ".git" (
+    echo ✅ Git 倉庫已存在
+    echo 當前 Git 狀態：
+    git status
     echo.
-    pause
+    set /p continue=是否要重新初始化？(y/n): 
+    if /i not "!continue!"=="y" (
+        echo 操作已取消
+        pause
+        goto start
+    )
+    echo 正在重新初始化...
+    rmdir /s /q .git
 )
 
 echo.
+echo 步驟2: 初始化 Git 倉庫...
+git init
+if errorlevel 1 (
+    echo ❌ Git 初始化失敗
+    echo 請確保已安裝 Git
+    pause
+    goto start
+)
+echo ✅ Git 倉庫已初始化
+
+echo.
+echo 步驟3: 設定遠端倉庫...
+git remote add origin https://github.com/sky770825/lady8888.git
+if errorlevel 1 (
+    echo ❌ 設定遠端倉庫失敗
+    echo 嘗試移除現有遠端並重新設定...
+    git remote remove origin
+    git remote add origin https://github.com/sky770825/lady8888.git
+    if errorlevel 1 (
+        echo ❌ 重新設定遠端倉庫失敗
+        pause
+        goto start
+    )
+)
+echo ✅ 遠端倉庫已設定
+
+echo.
+echo 步驟4: 添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
+    pause
+    goto start
+)
+echo ✅ 檔案已添加
+
+echo.
+echo 步驟5: 設定 Git 使用者資訊...
+git config user.name "sky770825"
+git config user.email "sky770825@users.noreply.github.com"
+echo ✅ Git 使用者資訊已設定
+
+echo.
+echo 步驟6: 提交初始版本...
+set commit_msg=初始提交 - 美業共享工作室網站 - %date% %time%
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
+)
+echo ✅ 初始版本已提交
+
+echo.
+echo 步驟7: 推送到 GitHub...
+git push -u origin main
+if errorlevel 1 (
+    echo ❌ 推送失敗
+    echo 可能的原因：
+    echo 1. 網路連接問題
+    echo 2. GitHub 認證問題
+    echo 3. 倉庫不存在或權限不足
+    echo.
+    echo 建議檢查：
+    echo - 確認 GitHub 倉庫 https://github.com/sky770825/lady8888 存在
+    echo - 檢查 GitHub 認證設定
+    echo - 確認網路連接
+    pause
+    goto start
+)
+echo ✅ 已推送到 GitHub
+
+echo.
+echo ================================
+echo 🎉 Git 初始化完成！
+echo ================================
+echo.
+echo 您的網站已成功部署：
+echo GitHub: https://github.com/sky770825/lady8888
+echo 網站: https://sky770825.github.io/lady8888/
+echo.
+echo 現在您可以使用其他功能來管理網站了！
+
 pause
 goto start
 
@@ -530,19 +620,95 @@ echo 🔧 修復 Git 同步問題
 echo ================================
 echo.
 
-echo 正在啟動 Git 同步修復工具...
+echo 正在修復 Git 同步問題...
 echo.
 
-if exist "fix-git-sync.bat" (
-    call fix-git-sync.bat
+echo 步驟1: 檢查 Git 狀態...
+git status
+echo.
+
+echo 步驟2: 獲取遠端最新內容...
+git fetch origin main
+if errorlevel 1 (
+    echo ❌ 獲取遠端內容失敗
+    echo 嘗試重新設定遠端倉庫...
+    git remote remove origin
+    git remote add origin https://github.com/sky770825/lady8888.git
+    git fetch origin main
+    if errorlevel 1 (
+        echo ❌ 重新設定遠端倉庫失敗
+        pause
+        goto start
+    )
+)
+echo ✅ 遠端內容已獲取
+
+echo.
+echo 步驟3: 檢查本地與遠端差異...
+git log --oneline -5
+echo.
+echo 遠端最新提交：
+git log origin/main --oneline -5
+echo.
+
+echo 步驟4: 合併遠端內容...
+git merge origin/main --allow-unrelated-histories
+if errorlevel 1 (
+    echo ❌ 合併失敗，嘗試強制合併...
+    git reset --hard origin/main
+    if errorlevel 1 (
+        echo ❌ 強制合併也失敗
+        echo 請手動解決衝突
+        pause
+        goto start
+    )
+)
+echo ✅ 內容已合併
+
+echo.
+echo 步驟5: 添加所有檔案...
+git add .
+echo ✅ 檔案已添加
+
+echo.
+echo 步驟6: 提交變更...
+set commit_msg=修復 Git 同步問題 - %date% %time%
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo ❌ 提交失敗，可能沒有變更需要提交
 ) else (
-    echo ❌ 找不到 fix-git-sync.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
-    echo.
-    pause
+    echo ✅ 變更已提交
 )
 
 echo.
+echo 步驟7: 推送到遠端...
+git push origin main
+if errorlevel 1 (
+    echo ❌ 推送失敗
+    echo 可能的原因：
+    echo 1. 網路連接問題
+    echo 2. GitHub 認證問題
+    echo 3. 權限不足
+    echo.
+    echo 建議檢查：
+    echo - 網路連接
+    echo - GitHub 認證設定
+    echo - 倉庫權限
+    pause
+    goto start
+)
+echo ✅ 推送成功！
+
+echo.
+echo ================================
+echo 🎉 Git 同步修復完成！
+echo ================================
+echo.
+echo 您的倉庫現在已與 GitHub 同步：
+echo GitHub: https://github.com/sky770825/lady8888
+echo 網站: https://sky770825.github.io/lady8888/
+echo.
+
 pause
 goto start
 
@@ -553,19 +719,73 @@ echo ⚡ 快速上傳檔案
 echo ================================
 echo.
 
-echo 正在啟動快速上傳工具...
+echo 正在快速上傳檔案到 GitHub...
 echo.
 
-if exist "quick-upload.bat" (
-    call quick-upload.bat
-) else (
-    echo ❌ 找不到 quick-upload.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
-    echo.
+echo 步驟1: 檢查 Git 狀態...
+if not exist ".git" (
+    echo ❌ Git 未初始化
+    echo 請先使用「自動初始化 Git 倉庫」功能
     pause
+    goto start
 )
 
+echo 當前狀態：
+git status --short
 echo.
+
+echo 步驟2: 添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
+    pause
+    goto start
+)
+echo ✅ 檔案已添加
+
+echo.
+echo 步驟3: 檢查要提交的檔案...
+git status --short
+echo.
+
+echo 步驟4: 提交變更...
+set commit_msg=快速上傳 - %date% %time%
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo ❌ 提交失敗，可能沒有變更需要提交
+    echo 當前沒有新的變更需要上傳
+    pause
+    goto start
+)
+echo ✅ 變更已提交
+
+echo.
+echo 步驟5: 推送到 GitHub...
+git push origin main
+if errorlevel 1 (
+    echo ❌ 推送失敗
+    echo 可能的原因：
+    echo 1. 網路連接問題
+    echo 2. GitHub 認證問題
+    echo 3. 需要先同步遠端內容
+    echo.
+    echo 建議使用「修復 Git 同步問題」功能
+    pause
+    goto start
+)
+echo ✅ 推送成功！
+
+echo.
+echo ================================
+echo 🎉 快速上傳完成！
+echo ================================
+echo.
+echo 您的檔案已成功上傳到：
+echo GitHub: https://github.com/sky770825/lady8888
+echo 網站: https://sky770825.github.io/lady8888/
+echo.
+echo 上傳時間：%date% %time%
+
 pause
 goto start
 
