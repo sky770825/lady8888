@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 
 :start
 echo ================================
-echo 🏠 華地產專用網站 - 完整管理工具
+echo 🤖 AI指令大全網站 - 完整管理工具
 echo ================================
 echo.
 
@@ -84,8 +84,8 @@ if errorlevel 1 (
     echo ================================
     echo.
     echo 您的網站已成功更新：
-    echo GitHub: https://github.com/sky770825/Hua-Real-Estate
-    echo 網站: https://sky770825.github.io/Hua-Real-Estate/
+    echo GitHub: https://github.com/sky770825/Aibot888
+    echo 網站: https://sky770825.github.io/Aibot888/
     echo.
     echo 現在您可以正常使用部署工具了！
 )
@@ -170,7 +170,7 @@ echo ================================
 
 echo.
 echo 您的網站地址：
-echo https://sky770825.github.io/Hua-Real-Estate/
+echo https://sky770825.github.io/Aibot888/
 echo.
 
 pause
@@ -267,8 +267,8 @@ echo.
 echo  部署資訊：
 echo   版本：%version%
 echo   時間：%date% %time%
-echo   GitHub：https://github.com/sky770825/Hua-Real-Estate
-echo   網站：https://sky770825.github.io/Hua-Real-Estate/
+echo   GitHub：https://github.com/sky770825/Aibot888
+echo   網站：https://sky770825.github.io/Aibot888/
 echo.
 
 set /p restore=是否恢復到部署前的狀態？(y/n): 
@@ -343,8 +343,8 @@ echo ================================
 echo.
 echo  下架資訊：
 echo   時間：%date% %time%
-echo   GitHub：https://github.com/sky770825/Hua-Real-Estate (現在是空白)
-echo   網站：https://sky770825.github.io/Hua-Real-Estate/ (無法顯示)
+echo   GitHub：https://github.com/sky770825/Aibot888 (現在是空白)
+echo   網站：https://sky770825.github.io/Aibot888/ (無法顯示)
 echo.
 echo  備份位置：backup_before_cleanup 資料夾
 echo.
@@ -427,11 +427,11 @@ goto start
 :exit
 echo.
 echo ================================
-echo 👋 感謝使用華地產網站管理工具！
+echo 👋 感謝使用AI指令大全網站管理工具！
 echo ================================
 echo.
 echo 您的網站地址：
-echo https://sky770825.github.io/Hua-Real-Estate/
+echo https://sky770825.github.io/Aibot888/
 echo.
 pause
 exit
