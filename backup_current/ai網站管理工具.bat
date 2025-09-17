@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 
 :start
 echo ================================
-echo 🤖 美業共享工作室網站 - 完整管理工具
+echo 🤖 AI指令大全網站 - 完整管理工具
 echo ================================
 echo.
 
@@ -15,13 +15,14 @@ echo 3. 部署指定版本 (上架)
 echo 4. 下架所有檔案
 echo 5. 建立版本備份
 echo 6. 查看版本資訊
-echo 7. 自動初始化 Git 倉庫
+echo 7. 初始化 Git 倉庫 (需要手動輸入倉庫連結)
 echo 8. 修復 Git 同步問題
 echo 9. 快速上傳檔案
-echo 10. 退出
+echo 10. 連接新專案 GitHub 倉庫
+echo 11. 退出
 echo.
 
-set /p choice=請輸入選項 (1-10): 
+set /p choice=請輸入選項 (1-11): 
 
 if "%choice%"=="1" goto fix_push
 if "%choice%"=="2" goto check_upload
@@ -32,7 +33,8 @@ if "%choice%"=="6" goto show_versions
 if "%choice%"=="7" goto auto_init_git
 if "%choice%"=="8" goto fix_git_sync
 if "%choice%"=="9" goto quick_upload
-if "%choice%"=="10" goto exit
+if "%choice%"=="10" goto connect_new_project
+if "%choice%"=="11" goto exit
 echo 無效選項
 pause
 goto start
@@ -98,16 +100,30 @@ echo.
 echo 步驟5: 推送到GitHub...
 git push origin main
 if errorlevel 1 (
-    echo ❌ 推送失敗
-    echo.
-    echo 可能的原因：
-    echo 1. 網路連接問題
-    echo 2. GitHub 認證問題
-    echo 3. 需要先同步遠端內容
-    echo.
-    echo 建議使用「修復 Git 同步問題」功能
-    pause
-    goto start
+    echo ❌ 推送失敗，嘗試強制推送...
+    git push -f origin main
+    if errorlevel 1 (
+        echo ❌ 強制推送到 main 也失敗，嘗試 master...
+        git push -f origin master
+        if errorlevel 1 (
+            echo ❌ 推送失敗
+            echo.
+            echo 可能的原因：
+            echo 1. 網路連接問題
+            echo 2. GitHub 認證問題
+            echo 3. 倉庫權限問題
+            echo.
+            echo 建議使用「修復 Git 同步問題」功能
+            pause
+            goto start
+        ) else (
+            echo ✅ 已強制推送到 master 分支
+        )
+    ) else (
+        echo ✅ 已強制推送到 main 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
 )
 
 echo.
@@ -116,8 +132,8 @@ echo 🎉 修復成功！
 echo ================================
 echo.
 echo 您的網站已成功更新：
-echo GitHub: https://github.com/sky770825/lady8888
-echo 網站: https://sky770825.github.io/lady8888/
+echo GitHub: https://github.com/sky770825/Aibot888
+echo 網站: https://sky770825.github.io/Aibot888/
 echo.
 echo 現在您可以正常使用部署工具了！
 
@@ -195,16 +211,30 @@ echo.
 echo 步驟4: 推送到GitHub...
 git push origin main
 if errorlevel 1 (
-    echo ❌ 推送失敗
-    echo.
-    echo 可能的原因：
-    echo 1. 網路連接問題
-    echo 2. GitHub 認證問題
-    echo 3. 需要先同步遠端內容
-    echo.
-    echo 建議使用「修復 Git 同步問題」功能
-    pause
-    goto start
+    echo ❌ 推送失敗，嘗試強制推送...
+    git push -f origin main
+    if errorlevel 1 (
+        echo ❌ 強制推送到 main 也失敗，嘗試 master...
+        git push -f origin master
+        if errorlevel 1 (
+            echo ❌ 推送失敗
+            echo.
+            echo 可能的原因：
+            echo 1. 網路連接問題
+            echo 2. GitHub 認證問題
+            echo 3. 倉庫權限問題
+            echo.
+            echo 建議使用「修復 Git 同步問題」功能
+            pause
+            goto start
+        ) else (
+            echo ✅ 已強制推送到 master 分支
+        )
+    ) else (
+        echo ✅ 已強制推送到 main 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
 )
 echo ✅ 推送成功！
 echo 所有檔案已上傳到GitHub
@@ -219,7 +249,7 @@ echo ================================
 
 echo.
 echo 您的網站地址：
-echo https://sky770825.github.io/lady8888/
+echo https://sky770825.github.io/Aibot888/
 echo.
 
 pause
@@ -319,16 +349,30 @@ echo.
 echo  步驟7: 上架到GitHub...
 git push origin main
 if errorlevel 1 (
-    echo  ❌ 上架失敗
-    echo.
-    echo  可能的原因：
-    echo  1. 網路連接問題
-    echo  2. GitHub 認證問題
-    echo  3. 需要先同步遠端內容
-    echo.
-    echo  建議使用「修復 Git 同步問題」功能
-    pause
-    goto start
+    echo  ❌ 上架失敗，嘗試強制推送...
+    git push -f origin main
+    if errorlevel 1 (
+        echo  ❌ 強制推送到 main 也失敗，嘗試 master...
+        git push -f origin master
+        if errorlevel 1 (
+            echo  ❌ 上架失敗
+            echo.
+            echo  可能的原因：
+            echo  1. 網路連接問題
+            echo  2. GitHub 認證問題
+            echo  3. 倉庫權限問題
+            echo.
+            echo  建議使用「修復 Git 同步問題」功能
+            pause
+            goto start
+        ) else (
+            echo  ✅ 已強制推送到 master 分支
+        )
+    ) else (
+        echo  ✅ 已強制推送到 main 分支
+    )
+) else (
+    echo  ✅ 已推送到 main 分支
 )
 echo  版本 %version% 已上架到GitHub
 
@@ -340,8 +384,8 @@ echo.
 echo  部署資訊：
 echo   版本：%version%
 echo   時間：%date% %time%
-echo   GitHub：https://github.com/sky770825/lady8888
-echo   網站：https://sky770825.github.io/lady8888/
+echo   GitHub：https://github.com/sky770825/Aibot888
+echo   網站：https://sky770825.github.io/Aibot888/
 echo.
 
 set /p restore=是否恢復到部署前的狀態？(y/n): 
@@ -418,8 +462,8 @@ echo ================================
 echo.
 echo  下架資訊：
 echo   時間：%date% %time%
-echo   GitHub：https://github.com/sky770825/lady8888 (現在是空白)
-echo   網站：https://sky770825.github.io/lady8888/ (無法顯示)
+echo   GitHub：https://github.com/sky770825/Aibot888 (現在是空白)
+echo   網站：https://sky770825.github.io/Aibot888/ (無法顯示)
 echo.
 echo  備份位置：backup_before_cleanup 資料夾
 echo.
@@ -503,21 +547,179 @@ goto start
 :auto_init_git
 echo.
 echo ================================
-echo 🚀 自動初始化 Git 倉庫
+echo 🚀 初始化 Git 倉庫
 echo ================================
 echo.
 
-echo 正在啟動自動化 Git 初始化工具...
+echo 請輸入您的 GitHub 倉庫連結：
+echo 範例：https://github.com/username/repository-name
+echo.
+set /p repo_url=請輸入 GitHub 連結: 
+
+if "%repo_url%"=="" (
+    echo ❌ 連結不能為空！
+    pause
+    goto start
+)
+
+echo.
+echo 正在驗證連結格式...
+echo %repo_url% | findstr "github.com" >nul
+if errorlevel 1 (
+    echo ❌ 無效的 GitHub 連結格式
+    echo 請確保連結包含 github.com
+    pause
+    goto start
+)
+echo ✅ 連結格式正確
+
+echo.
+echo 正在檢查 Git 是否已安裝...
+git --version >nul 2>&1
+if errorlevel 1 (
+    echo ❌ Git 未安裝或未正確配置
+    echo 請先安裝 Git: https://git-scm.com/
+    pause
+    goto start
+)
+echo ✅ Git 已安裝
+
+echo.
+echo 正在檢查是否已初始化 Git 倉庫...
+if exist ".git" (
+    echo ✅ Git 倉庫已存在
+    echo 當前狀態：
+    git status --short
+    echo.
+    echo 正在檢查遠端倉庫...
+    git remote -v
+    echo.
+    set /p replace=是否要替換現有的遠端倉庫？(y/n): 
+    if /i not "%replace%"=="y" (
+        echo 操作已取消
+        pause
+        goto start
+    )
+    echo 正在移除現有遠端倉庫...
+    git remote remove origin 2>nul
+    echo ✅ 現有遠端倉庫已移除
+) else (
+    echo 正在初始化 Git 倉庫...
+    git init
+    if errorlevel 1 (
+        echo ❌ 初始化失敗
+        pause
+        goto start
+    )
+    echo ✅ Git 倉庫已初始化
+)
+
+echo.
+echo 正在添加遠端倉庫...
+git remote add origin %repo_url%
+if errorlevel 1 (
+    echo ❌ 添加遠端倉庫失敗
+    pause
+    goto start
+)
+echo ✅ 遠端倉庫已添加
+
+echo.
+echo 正在配置 Git 用戶資訊...
+git config user.name "AI網站管理工具" >nul 2>&1
+git config user.email "ai@example.com" >nul 2>&1
+echo ✅ Git 用戶資訊已配置
+
+echo.
+echo 正在添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
+    pause
+    goto start
+)
+echo ✅ 檔案已添加
+
+echo.
+echo 正在提交初始版本...
+git commit -m "初始化 AI 網站管理工具 - %date% %time%"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
+)
+echo ✅ 初始版本已提交
+
+echo.
+echo 正在檢查遠端分支...
+git ls-remote --heads origin
 echo.
 
-if exist "auto-init-git.bat" (
-    call auto-init-git.bat
-) else (
-    echo ❌ 找不到 auto-init-git.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
+echo 正在推送到 GitHub...
+echo 嘗試推送到 main 分支...
+git push -u origin main
+if errorlevel 1 (
+    echo ❌ 推送到 main 失敗
     echo.
-    pause
+    echo 嘗試推送到 master 分支...
+    git push -u origin master
+    if errorlevel 1 (
+        echo ❌ 推送到 master 也失敗
+        echo.
+        echo 正在檢查本地分支...
+        git branch
+        echo.
+        echo 正在檢查遠端分支...
+        git ls-remote --heads origin
+        echo.
+        echo 嘗試強制推送到 main...
+        git push -f origin main
+        if errorlevel 1 (
+            echo 嘗試強制推送到 master...
+            git push -f origin master
+            if errorlevel 1 (
+                echo ❌ 所有推送方式都失敗
+                echo.
+                echo 可能的原因：
+                echo 1. 網路連接問題
+                echo 2. GitHub 認證問題
+                echo 3. 倉庫權限問題
+                echo 4. 遠端倉庫為空或沒有正確的分支
+                echo.
+                echo 建議操作：
+                echo 1. 檢查 GitHub 倉庫是否為空
+                echo 2. 在 GitHub 上建立初始檔案
+                echo 3. 檢查倉庫權限設定
+                echo 4. 確認分支名稱正確
+                echo.
+                pause
+                goto start
+            ) else (
+                echo ✅ 已強制推送到 master 分支
+            )
+        ) else (
+            echo ✅ 已強制推送到 main 分支
+        )
+    ) else (
+        echo ✅ 已推送到 master 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
 )
+
+echo.
+echo ================================
+echo 🎉 Git 倉庫初始化完成！
+echo ================================
+echo.
+echo 倉庫資訊：
+echo 連結：%repo_url%
+echo 時間：%date% %time%
+echo.
+echo 如果這是 GitHub Pages 倉庫，您的網站地址可能是：
+echo %repo_url:~0,-4%.github.io/%repo_url:~19%
+echo.
+echo 現在可以使用其他管理功能了！
 
 echo.
 pause
@@ -530,17 +732,140 @@ echo 🔧 修復 Git 同步問題
 echo ================================
 echo.
 
-echo 正在啟動 Git 同步修復工具...
+echo 正在診斷 Git 同步問題...
 echo.
 
-if exist "fix-git-sync.bat" (
-    call fix-git-sync.bat
-) else (
-    echo ❌ 找不到 fix-git-sync.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
-    echo.
-    pause
+echo 步驟1: 檢查 Git 狀態...
+git status
+echo.
+
+echo 步驟2: 檢查遠端倉庫...
+git remote -v
+echo.
+
+echo 步驟3: 檢查分支資訊...
+git branch -a
+echo.
+
+echo 步驟4: 嘗試獲取遠端內容...
+git fetch origin
+if errorlevel 1 (
+    echo ❌ 獲取遠端內容失敗
+    echo 正在嘗試重新添加遠端倉庫...
+    echo 請輸入正確的 GitHub 倉庫連結：
+    set /p repo_url=請輸入 GitHub 連結: 
+    if "%repo_url%"=="" (
+        echo ❌ 連結不能為空！
+        pause
+        goto start
+    )
+    git remote remove origin
+    git remote add origin %repo_url%
+    git fetch origin
+    if errorlevel 1 (
+        echo ❌ 仍然無法獲取遠端內容
+        echo 請檢查網路連接和 GitHub 認證
+        pause
+        goto start
+    )
 )
+echo ✅ 遠端內容已獲取
+
+echo.
+echo 步驟5: 檢查本地和遠端的差異...
+git log --oneline -5
+echo.
+echo 遠端最新提交：
+git log --oneline origin/main -5
+echo.
+
+echo 步驟6: 嘗試合併遠端內容...
+git merge origin/main --allow-unrelated-histories
+if errorlevel 1 (
+    echo ❌ 合併失敗，可能有衝突
+    echo 正在嘗試強制合併...
+    git reset --hard origin/main
+    if errorlevel 1 (
+        echo ❌ 強制合併也失敗
+        echo 請手動解決衝突
+        pause
+        goto start
+    )
+    echo ✅ 強制合併成功
+) else (
+    echo ✅ 合併成功
+)
+
+echo.
+echo 步驟7: 添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
+    pause
+    goto start
+)
+echo ✅ 檔案已添加
+
+echo.
+echo 步驟8: 提交變更...
+git commit -m "修復同步問題 - %date% %time%"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
+)
+echo ✅ 變更已提交
+
+echo.
+echo 步驟9: 推送到 GitHub...
+git push origin main
+if errorlevel 1 (
+    echo ❌ 推送失敗，嘗試強制推送...
+    git push -f origin main
+    if errorlevel 1 (
+        echo ❌ 強制推送到 main 也失敗，嘗試 master...
+        git push -f origin master
+        if errorlevel 1 (
+            echo ❌ 推送失敗
+            echo.
+            echo 可能的原因：
+            echo 1. 網路連接問題
+            echo 2. GitHub 認證問題
+            echo 3. 倉庫權限問題
+            echo.
+            echo 建議檢查：
+            echo - 網路連接
+            echo - GitHub 認證設定
+            echo - 倉庫權限
+            pause
+            goto start
+        ) else (
+            echo ✅ 已強制推送到 master 分支
+        )
+    ) else (
+        echo ✅ 已強制推送到 main 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
+)
+
+echo.
+echo ================================
+echo 🎉 Git 同步問題已修復！
+echo ================================
+echo.
+echo 當前遠端倉庫：
+git remote -v
+echo.
+echo 如果這是 GitHub Pages 倉庫，您的網站地址可能是：
+for /f "tokens=*" %%i in ('git remote get-url origin 2^>nul') do set current_repo=%%i
+if defined current_repo (
+    echo %current_repo:~0,-4%.github.io/%current_repo:~19%
+) else (
+    echo 無法取得倉庫資訊
+)
+echo.
+echo 現在可以正常使用所有功能了！
 
 echo.
 pause
@@ -553,17 +878,275 @@ echo ⚡ 快速上傳檔案
 echo ================================
 echo.
 
-echo 正在啟動快速上傳工具...
+echo 正在快速上傳所有檔案到 GitHub...
 echo.
 
-if exist "quick-upload.bat" (
-    call quick-upload.bat
-) else (
-    echo ❌ 找不到 quick-upload.bat 檔案
-    echo 請確保該檔案存在於當前目錄中
-    echo.
+echo 步驟1: 檢查 Git 狀態...
+git status --short
+echo.
+
+echo 步驟2: 添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
     pause
+    goto start
 )
+echo ✅ 檔案已添加
+
+echo.
+echo 步驟3: 檢查添加的檔案...
+git status --short
+echo.
+
+echo 步驟4: 提交變更...
+set commit_msg=快速上傳 - %date% %time%
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
+)
+echo ✅ 變更已提交
+
+echo.
+echo 步驟5: 推送到 GitHub...
+git push origin main
+if errorlevel 1 (
+    echo ❌ 推送失敗，嘗試強制推送...
+    git push -f origin main
+    if errorlevel 1 (
+        echo ❌ 強制推送到 main 也失敗，嘗試 master...
+        git push -f origin master
+        if errorlevel 1 (
+            echo ❌ 推送失敗
+            echo.
+            echo 可能的原因：
+            echo 1. 網路連接問題
+            echo 2. GitHub 認證問題
+            echo 3. 倉庫權限問題
+            echo.
+            echo 建議使用「修復 Git 同步問題」功能
+            pause
+            goto start
+        ) else (
+            echo ✅ 已強制推送到 master 分支
+        )
+    ) else (
+        echo ✅ 已強制推送到 main 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
+)
+
+echo.
+echo ================================
+echo 🎉 快速上傳完成！
+echo ================================
+echo.
+echo 當前遠端倉庫：
+git remote -v
+echo.
+echo 如果這是 GitHub Pages 倉庫，您的網站地址可能是：
+for /f "tokens=*" %%i in ('git remote get-url origin 2^>nul') do set current_repo=%%i
+if defined current_repo (
+    echo %current_repo:~0,-4%.github.io/%current_repo:~19%
+) else (
+    echo 無法取得倉庫資訊
+)
+echo.
+echo 所有檔案已成功上傳到 GitHub！
+
+echo.
+pause
+goto start
+
+:connect_new_project
+echo.
+echo ================================
+echo 🔗 連接新專案 GitHub 倉庫
+echo ================================
+echo.
+
+echo 請輸入新專案的 GitHub 倉庫連結：
+echo 範例：https://github.com/username/project-name
+echo.
+set /p repo_url=請輸入 GitHub 連結: 
+
+if "%repo_url%"=="" (
+    echo ❌ 連結不能為空！
+    pause
+    goto start
+)
+
+echo.
+echo 正在驗證連結格式...
+echo %repo_url% | findstr "github.com" >nul
+if errorlevel 1 (
+    echo ❌ 無效的 GitHub 連結格式
+    echo 請確保連結包含 github.com
+    pause
+    goto start
+)
+echo ✅ 連結格式正確
+
+echo.
+echo 正在檢查 Git 是否已安裝...
+git --version >nul 2>&1
+if errorlevel 1 (
+    echo ❌ Git 未安裝或未正確配置
+    echo 請先安裝 Git: https://git-scm.com/
+    pause
+    goto start
+)
+echo ✅ Git 已安裝
+
+echo.
+echo 正在處理現有 Git 設定...
+if exist ".git" (
+    echo ✅ Git 倉庫已存在
+    echo 當前遠端倉庫：
+    git remote -v
+    echo.
+    echo 正在移除現有遠端倉庫...
+    git remote remove origin 2>nul
+    echo ✅ 現有遠端倉庫已移除
+) else (
+    echo 正在初始化 Git 倉庫...
+    git init
+    if errorlevel 1 (
+        echo ❌ 初始化失敗
+        pause
+        goto start
+    )
+    echo ✅ Git 倉庫已初始化
+)
+
+echo.
+echo 正在添加新的遠端倉庫...
+git remote add origin %repo_url%
+if errorlevel 1 (
+    echo ❌ 添加遠端倉庫失敗
+    pause
+    goto start
+)
+echo ✅ 遠端倉庫已添加
+
+echo.
+echo 正在配置 Git 用戶資訊...
+git config user.name "AI網站管理工具" >nul 2>&1
+git config user.email "ai@example.com" >nul 2>&1
+echo ✅ Git 用戶資訊已配置
+
+echo.
+echo 正在獲取遠端內容...
+git fetch origin
+if errorlevel 1 (
+    echo ❌ 獲取遠端內容失敗
+    echo 可能的原因：
+    echo 1. 倉庫不存在或無權限
+    echo 2. 網路連接問題
+    echo 3. 倉庫連結錯誤
+    pause
+    goto start
+)
+echo ✅ 遠端內容已獲取
+
+echo.
+echo 正在檢查分支...
+git branch -a
+echo.
+
+echo 正在添加所有檔案...
+git add .
+if errorlevel 1 (
+    echo ❌ 添加檔案失敗
+    pause
+    goto start
+)
+echo ✅ 檔案已添加
+
+echo.
+echo 正在提交變更...
+git commit -m "連接新專案倉庫 - %date% %time%"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
+)
+echo ✅ 變更已提交
+
+echo.
+echo 正在檢查遠端分支...
+git ls-remote --heads origin
+echo.
+
+echo 正在推送到新倉庫...
+echo 嘗試推送到 main 分支...
+git push -u origin main
+if errorlevel 1 (
+    echo ❌ 推送到 main 失敗
+    echo.
+    echo 嘗試推送到 master 分支...
+    git push -u origin master
+    if errorlevel 1 (
+        echo ❌ 推送到 master 也失敗
+        echo.
+        echo 正在檢查本地分支...
+        git branch
+        echo.
+        echo 正在檢查遠端分支...
+        git ls-remote --heads origin
+        echo.
+        echo 嘗試強制推送到 main...
+        git push -f origin main
+        if errorlevel 1 (
+            echo 嘗試強制推送到 master...
+            git push -f origin master
+            if errorlevel 1 (
+                echo ❌ 所有推送方式都失敗
+                echo.
+                echo 可能的原因：
+                echo 1. 網路連接問題
+                echo 2. GitHub 認證問題
+                echo 3. 倉庫權限問題
+                echo 4. 分支名稱不匹配
+                echo 5. 遠端倉庫為空或沒有正確的分支
+                echo.
+                echo 建議操作：
+                echo 1. 檢查 GitHub 倉庫是否為空
+                echo 2. 在 GitHub 上建立初始檔案
+                echo 3. 檢查倉庫權限設定
+                echo 4. 確認分支名稱正確
+                echo.
+                pause
+                goto start
+            ) else (
+                echo ✅ 已強制推送到 master 分支
+            )
+        ) else (
+            echo ✅ 已強制推送到 main 分支
+        )
+    ) else (
+        echo ✅ 已推送到 master 分支
+    )
+) else (
+    echo ✅ 已推送到 main 分支
+)
+
+echo.
+echo ================================
+echo 🎉 新專案連接完成！
+echo ================================
+echo.
+echo 專案資訊：
+echo 連結：%repo_url%
+echo 時間：%date% %time%
+echo.
+echo 如果這是 GitHub Pages 倉庫，您的網站地址可能是：
+echo %repo_url:~0,-4%.github.io/%repo_url:~19%
+echo.
+echo 現在可以使用其他管理功能了！
 
 echo.
 pause
@@ -572,11 +1155,11 @@ goto start
 :exit
 echo.
 echo ================================
-echo 👋 感謝使用美業共享工作室網站管理工具！
+echo 👋 感謝使用AI指令大全網站管理工具！
 echo ================================
 echo.
 echo 您的網站地址：
-echo https://sky770825.github.io/lady8888/
+echo https://sky770825.github.io/Aibot888/
 echo.
 pause
 exit
