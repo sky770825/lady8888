@@ -86,19 +86,13 @@ echo ✅ 檔案已添加
 echo.
 echo 步驟4: 提交檔案...
 set commit_msg=修復推送問題 - %date% %time%
-rem 若無變更則跳過提交
-git diff --cached --quiet
-if not errorlevel 1 (
-    echo ℹ️ 無變更可提交，跳過提交
-) else (
-    git commit -m "!commit_msg!"
-    if errorlevel 1 (
-        echo ❌ 提交失敗
-        pause
-        goto start
-    )
-    echo ✅ 檔案已提交
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo ❌ 提交失敗
+    pause
+    goto start
 )
+echo ✅ 檔案已提交
 
 echo.
 echo 步驟5: 推送到GitHub...
@@ -286,24 +280,7 @@ echo  當前檔案已備份
 echo.
 echo  步驟2: 下架GitHub舊檔案...
 git rm -r --cached .
-if errorlevel 1 (
-    echo  ❌ 下載失敗，嘗試其他方法...
-    echo.
-    echo 正在獲取遠端內容...
-    git fetch origin main
-    echo ✅ 遠端內容已獲取
-    echo.
-    echo 正在合併內容...
-    git merge origin/main --allow-unrelated-histories
-    if errorlevel 1 (
-        echo ❌ 合併失敗
-        echo 請手動解決衝突或選擇強制覆蓋
-        pause
-        goto start
-    )
-) else (
-    echo ✅ GitHub內容已下載
-)
+echo  GitHub舊檔案已下架
 
 echo.
 echo  步驟3: 複製版本檔案...
@@ -330,19 +307,13 @@ echo  版本檔案已添加到Git
 echo.
 echo  步驟6: 提交變更...
 set commit_msg=部署版本 %version% - %date% %time%
-rem 若無變更則跳過提交
-git diff --cached --quiet
-if not errorlevel 1 (
-    echo  ℹ️ 無變更可提交，跳過提交
-) else (
-    git commit -m "!commit_msg!"
-    if errorlevel 1 (
-        echo  ❌ 提交失敗
-        pause
-        goto start
-    )
-    echo  變更已提交
+git commit -m "!commit_msg!"
+if errorlevel 1 (
+    echo  ❌ 提交失敗
+    pause
+    goto start
 )
+echo  變更已提交
 
 echo.
 echo  步驟7: 上架到GitHub...
@@ -428,55 +399,16 @@ echo  檔案已備份到 backup_before_cleanup 資料夾
 echo.
 echo  步驟2: 下架GitHub檔案...
 git rm -r --cached .
-if errorlevel 1 (
-    echo  ❌ 下載失敗，嘗試其他方法...
-    echo.
-    echo 正在獲取遠端內容...
-    git fetch origin main
-    echo ✅ 遠端內容已獲取
-    echo.
-    echo 正在合併內容...
-    git merge origin/main --allow-unrelated-histories
-    if errorlevel 1 (
-        echo ❌ 合併失敗
-        echo 請手動解決衝突或選擇強制覆蓋
-        pause
-        goto start
-    )
-) else (
-    echo ✅ GitHub內容已下載
-)
-if errorlevel 1 (
-    echo  ❌ 下架標記失敗（可能沒有任何被追蹤的檔案）
-    pause
-    goto start
-)
 echo  GitHub檔案已從暫存區移除
 
 echo.
 echo  步驟3: 提交下架變更...
-rem 若無變更則跳過提交
-git diff --cached --quiet
-if not errorlevel 1 (
-    echo  ℹ️ 無變更可提交，跳過提交
-) else (
-    git commit -m "下架所有檔案 - %date% %time%"
-    if errorlevel 1 (
-        echo  ❌ 提交失敗
-        pause
-        goto start
-    )
-    echo  下架變更已提交
-)
+git commit -m "下架所有檔案 - %date% %time%"
+echo  下架變更已提交
 
 echo.
 echo  步驟4: 推送到GitHub...
 git push origin main
-if errorlevel 1 (
-    echo  ❌ 推送失敗
-    pause
-    goto start
-)
 echo  下架完成，已推送到GitHub
 
 echo.
