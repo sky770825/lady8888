@@ -157,6 +157,28 @@
     border-bottom: none;
   }
   
+  /* 中等手機版優化 (481px - 600px) */
+  @media (max-width: 600px) and (min-width: 481px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 8px;
+    }
+    
+    label {
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+    }
+    
+    input[type="number"] {
+      padding: 7px 9px;
+      font-size: 0.9rem;
+    }
+    
+    .param-title {
+      font-size: 1.05rem;
+    }
+  }
+
   /* 平板版優化 (768px - 1024px) */
   @media (max-width: 1024px) and (min-width: 769px) {
     main {
@@ -205,8 +227,8 @@
     }
     
     .grid {
-      grid-template-columns: 1fr;
-      gap: 15px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 8px;
     }
     
     .result-box {
@@ -235,13 +257,23 @@
     }
     
     input[type="number"] {
-      padding: 10px 12px;
-      font-size: 1rem;
+      padding: 8px 10px;
+      font-size: 0.9rem;
     }
     
     button {
       padding: 12px 20px;
       font-size: 0.95rem;
+    }
+    
+    div[style*="display: flex"] {
+      flex-direction: column;
+      gap: 10px !important;
+    }
+    
+    div[style*="display: flex"] button {
+      width: 100% !important;
+      min-width: unset !important;
     }
     
     .final-result, .meiling-result {
@@ -292,6 +324,11 @@
       margin-bottom: 15px;
     }
     
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px 6px;
+    }
+    
     .card {
       padding: 15px;
     }
@@ -305,17 +342,28 @@
     }
     
     label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      margin-bottom: 4px;
     }
     
     input[type="number"] {
-      padding: 8px 10px;
-      font-size: 0.95rem;
+      padding: 6px 8px;
+      font-size: 0.85rem;
     }
     
     button {
       padding: 10px 15px;
       font-size: 0.9rem;
+    }
+    
+    div[style*="display: flex"] {
+      flex-direction: column;
+      gap: 8px !important;
+    }
+    
+    div[style*="display: flex"] button {
+      width: 100% !important;
+      min-width: unset !important;
     }
     
     .final-result, .meiling-result {
@@ -483,9 +531,9 @@
       </div>
     </div>
 
-    <div style="display: flex; gap: 15px; margin-top: 20px;">
-      <button onclick="calculate()" style="flex: 1;">計算結果</button>
-      <button onclick="resetAll()" style="flex: 1; background: #6b7280;">重置所有數值</button>
+    <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+      <button onclick="calculate()" style="flex: 1; min-width: 120px;">計算結果</button>
+      <button onclick="resetAll()" style="flex: 1; min-width: 120px; background: #6b7280;">重置所有數值</button>
     </div>
   </section>
 
@@ -529,11 +577,11 @@
     <div class="param-group">
       <div class="param-title">生成完整報表</div>
       <p>點擊下方按鈕下載完整的試算報表，包含所有收入、支出、分潤分析及年度預測。</p>
-      <div style="display: flex; gap: 15px; margin-top: 20px;">
-        <button onclick="exportToPDF()" style="background: #dc2626; flex: 1;">
+      <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+        <button onclick="exportToPDF()" style="background: #dc2626; flex: 1; min-width: 140px;">
           📄 下載 PDF 報表
         </button>
-        <button onclick="exportToExcel()" style="background: #059669; flex: 1;">
+        <button onclick="exportToExcel()" style="background: #059669; flex: 1; min-width: 140px;">
           📊 下載 Excel 報表
         </button>
       </div>
@@ -763,67 +811,67 @@ function exportToExcel() {
     ['教室日租價', t('classroomRent'), '元', '教室每日租金', '', '', ''],
     ['', '', '', '', '', '', ''],
     
-    // 空間配置區
+    // 空間配置區 (修正公式參照)
     ['🏢 空間配置與租金', '', '', '', '', '', ''],
     ['項目', '數量', '月租單價', '月租總額', '年租總額', '利用率', '備註'],
-    ['美甲桌', t('nailDesks'), t('nailDeskRent'), `=B8*C8`, `=D8*12`, '100%', '固定租用'],
-    ['美容床', t('beds'), t('bedRent'), `=B9*C9`, `=D9*12`, '100%', '固定租用'],
-    ['大包箱', t('boxes'), t('boxRent'), `=B10*C10`, `=D10*12`, '100%', '固定租用'],
-    ['車位', t('parkingSpots'), t('parkingRent'), `=B11*C11`, `=D11*12`, '100%', '固定租用'],
-    ['空間租金小計', '', '', `=SUM(D8:D11)`, `=SUM(E8:E11)`, '', ''],
+    ['美甲桌', t('nailDesks'), t('nailDeskRent'), `=B20*C20`, `=D20*12`, '100%', '固定租用'],
+    ['美容床', t('beds'), t('bedRent'), `=B21*C21`, `=D21*12`, '100%', '固定租用'],
+    ['大包箱', t('boxes'), t('boxRent'), `=B22*C22`, `=D22*12`, '100%', '固定租用'],
+    ['車位', t('parkingSpots'), t('parkingRent'), `=B23*C23`, `=D23*12`, '100%', '固定租用'],
+    ['空間租金小計', '', '', `=SUM(D20:D23)`, `=SUM(E20:E23)`, '', ''],
     ['', '', '', '', '', '', ''],
     
-    // 收入分析區
+    // 收入分析區 (修正公式參照)
     ['📈 收入結構分析', '', '', '', '', '', ''],
     ['收入項目', '計算公式', '月收入', '年收入', '佔比', '成長潛力', '備註'],
-    ['公司分租收入', '空間租金總計', currentResults.rentalIncome, `=C14*12`, `=C14/$C$18`, '穩定', '固定租金收入'],
-    ['來電客公司分潤', '技師數×客數×客單價×3/7', currentResults.clientRevenue, `=C15*12`, `=C15/$C$18`, '高', '主要成長動能'],
-    ['課程收入(3/7抽成)', '課程場次×學員×學費×3/7', currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue, `=C16*12`, `=C16/$C$18`, '中', '季節性波動'],
-    ['教室租金(私流量)', '租用天數×日租價', currentResults.privateClassRent, `=C17*12`, `=C17/$C$18`, '低', '補充收入'],
-    ['總營收', '收入項目加總', currentResults.totalRevenue, `=C18*12`, '100%', '', ''],
+    ['公司分租收入', '空間租金總計', currentResults.rentalIncome, `=C28*12`, `=C28/$C$32`, '穩定', '固定租金收入'],
+    ['來電客公司分潤', '技師數×客數×客單價×3/7', currentResults.clientRevenue, `=C29*12`, `=C29/$C$32`, '高', '主要成長動能'],
+    ['課程收入(3/7抽成)', '課程場次×學員×學費×3/7', currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue, `=C30*12`, `=C30/$C$32`, '中', '季節性波動'],
+    ['教室租金(私流量)', '租用天數×日租價', currentResults.privateClassRent, `=C31*12`, `=C31/$C$32`, '低', '補充收入'],
+    ['總營收', '收入項目加總', currentResults.totalRevenue, `=C32*12`, '100%', '', ''],
     ['', '', '', '', '', '', ''],
     
-    // 支出分析區
+    // 支出分析區 (修正公式參照)
     ['📉 支出結構分析', '', '', '', '', '', ''],
     ['支出項目', '月支出', '年支出', '佔總支出比', '可控制性', '優化建議', '備註'],
-    ['房租', t('rent'), `=B22*12`, `=B22/$B$33`, '固定', '長期合約', '最大支出項目'],
-    ['車位費', t('parkingFee'), `=B23*12`, `=B23/$B$33`, '固定', '長期合約', '必要支出'],
-    ['水費', t('waterBill'), `=B24*12`, `=B24/$B$33`, '變動', '節水措施', '季節性波動'],
-    ['電費', t('electricBill'), `=B25*12`, `=B25/$B$33`, '變動', '節能設備', '夏季高峰'],
-    ['網路費', t('internetBill'), `=B26*12`, `=B26/$B$33`, '固定', '合約優化', '必要支出'],
-    ['會計費', t('accountingFee'), `=B27*12`, `=B27/$B$33`, '固定', '服務比較', '專業服務'],
-    ['清潔費', t('cleaningFee'), `=B28*12`, `=B28/$B$33`, '變動', '頻率調整', '可優化'],
-    ['保險費', t('insurance'), `=B29*12`, `=B29/$B$33`, '固定', '方案比較', '風險管控'],
-    ['設備維護費', t('maintenance'), `=B30*12`, `=B30/$B$33`, '變動', '預防保養', '設備管理'],
-    ['廣告耗材', t('marketingExpense'), `=B31*12`, `=B31/$B$33`, '變動', '效果評估', '行銷投資'],
-    ['其他雜支', t('miscExpense'), `=B32*12`, `=B32/$B$33`, '變動', '預算控制', '彈性支出'],
-    ['總支出', currentResults.totalCost, `=B33*12`, '100%', '', '', ''],
+    ['房租', t('rent'), `=B36*12`, `=B36/$B$47`, '固定', '長期合約', '最大支出項目'],
+    ['車位費', t('parkingFee'), `=B37*12`, `=B37/$B$47`, '固定', '長期合約', '必要支出'],
+    ['水費', t('waterBill'), `=B38*12`, `=B38/$B$47`, '變動', '節水措施', '季節性波動'],
+    ['電費', t('electricBill'), `=B39*12`, `=B39/$B$47`, '變動', '節能設備', '夏季高峰'],
+    ['網路費', t('internetBill'), `=B40*12`, `=B40/$B$47`, '固定', '合約優化', '必要支出'],
+    ['會計費', t('accountingFee'), `=B41*12`, `=B41/$B$47`, '固定', '服務比較', '專業服務'],
+    ['清潔費', t('cleaningFee'), `=B42*12`, `=B42/$B$47`, '變動', '頻率調整', '可優化'],
+    ['保險費', t('insurance'), `=B43*12`, `=B43/$B$47`, '固定', '方案比較', '風險管控'],
+    ['設備維護費', t('maintenance'), `=B44*12`, `=B44/$B$47`, '變動', '預防保養', '設備管理'],
+    ['廣告耗材', t('marketingExpense'), `=B45*12`, `=B45/$B$47`, '變動', '效果評估', '行銷投資'],
+    ['其他雜支', t('miscExpense'), `=B46*12`, `=B46/$B$47`, '變動', '預算控制', '彈性支出'],
+    ['總支出', currentResults.totalCost, `=B47*12`, '100%', '', '', ''],
     ['', '', '', '', '', '', ''],
     
-    // 分潤分析區
+    // 分潤分析區 (修正公式參照)
     ['💰 分潤機制分析', '', '', '', '', '', ''],
     ['分潤項目', '計算基礎', '月金額', '年金額', '分配比例', '負責人', '備註'],
-    ['稅後淨利', '總營收-總支出', currentResults.netProfit, `=C37*12`, '100%', '公司', '分潤基礎'],
-    ['行銷分潤', '淨利×20%', currentResults.marketingBonus, `=C38*12`, '20%', '濬瑒+子菲', '行銷獎勵'],
-    ['剩餘利潤', '淨利-行銷分潤', currentResults.remainingProfit, `=C39*12`, '80%', '公司', '股權分潤基礎'],
-    ['梅鈴股權分紅', '剩餘利潤×95%', currentResults.share95, `=C40*12`, '76%', '梅鈴', '大股東分潤'],
-    ['團隊股權分紅', '剩餘利潤×5%', currentResults.share5, `=C41*12`, '4%', '濬瑒+子菲', '小股東分潤'],
+    ['稅後淨利', '總營收-總支出', currentResults.netProfit, `=C51*12`, '100%', '公司', '分潤基礎'],
+    ['行銷分潤', '淨利×20%', currentResults.marketingBonus, `=C52*12`, '20%', '濬瑒+子菲', '行銷獎勵'],
+    ['剩餘利潤', '淨利-行銷分潤', currentResults.remainingProfit, `=C53*12`, '80%', '公司', '股權分潤基礎'],
+    ['梅鈴股權分紅', '剩餘利潤×95%', currentResults.share95, `=C54*12`, '76%', '梅鈴', '大股東分潤'],
+    ['團隊股權分紅', '剩餘利潤×5%', currentResults.share5, `=C55*12`, '4%', '濬瑒+子菲', '小股東分潤'],
     ['', '', '', '', '', '', ''],
     
-    // 總收益摘要
+    // 總收益摘要 (修正公式參照)
     ['🎯 個人收益摘要', '', '', '', '', '', ''],
     ['受益人', '股權分紅', '行銷分潤', '總收益', '年收益', '佔比', ''],
-    ['濬瑒+子菲', currentResults.share5, currentResults.marketingBonus, currentResults.youTotal, `=D45*12`, `=D45/$D$46`, ''],
-    ['梅鈴', currentResults.share95, 0, currentResults.share95, `=D46*12`, `=D46/$D$46`, ''],
+    ['濬瑒+子菲', currentResults.share5, currentResults.marketingBonus, currentResults.youTotal, `=D59*12`, `=D59/(D59+D60)`, ''],
+    ['梅鈴', currentResults.share95, 0, currentResults.share95, `=D60*12`, `=D60/(D59+D60)`, ''],
     ['', '', '', '', '', '', ''],
     
-    // 財務指標
+    // 財務指標 (修正公式參照)
     ['📊 財務健康指標', '', '', '', '', '', ''],
     ['指標項目', '數值', '單位', '標準值', '評估', '說明', ''],
-    ['毛利率', `=($C$18-$B$33)/$C$18*100`, '%', '>30%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.3 ? '良好' : '待改善', '獲利能力指標', ''],
-    ['淨利率', `=$C$37/$C$18*100`, '%', '>20%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.2 ? '優秀' : '一般', '營運效率指標', ''],
-    ['支出佔比', `=$B$33/$C$18*100`, '%', '<80%', currentResults.totalCost/currentResults.totalRevenue*100 < 0.8 ? '良好' : '偏高', '成本控制指標', ''],
-    ['投資回報率', `=$D$45/$B$22*100`, '%', '>100%', currentResults.youTotal/t('rent')*100 > 100 ? '優秀' : '一般', '投資效益指標', ''],
+    ['毛利率', `=(C32-B47)/C32*100`, '%', '>30%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.3 ? '良好' : '待改善', '獲利能力指標', ''],
+    ['淨利率', `=C51/C32*100`, '%', '>20%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.2 ? '優秀' : '一般', '營運效率指標', ''],
+    ['支出佔比', `=B47/C32*100`, '%', '<80%', currentResults.totalCost/currentResults.totalRevenue*100 < 0.8 ? '良好' : '偏高', '成本控制指標', ''],
+    ['投資回報率', `=D59/B36*100`, '%', '>100%', currentResults.youTotal/t('rent')*100 > 100 ? '優秀' : '一般', '投資效益指標', ''],
     ['', '', '', '', '', '', ''],
     
     // 版權聲明
@@ -880,23 +928,23 @@ function exportToExcel() {
   
   XLSX.utils.book_append_sheet(wb, ws2, '敏感度分析');
   
-  // 創建月度預測工作表
+  // 創建月度預測工作表 (修正公式參照)
   const monthlyForecastData = [
     ['📅 月度財務預測', '', '', '', '', ''],
     ['', '', '', '', '', ''],
     ['月份', '營收預測', '支出預測', '淨利預測', '濬瑒+子菲收益', '梅鈴收益'],
-    ['1月', `=財務報表!C18`, `=財務報表!B33`, `=B4-C4`, `=財務報表!C45`, `=財務報表!C46`],
-    ['2月', `=財務報表!C18`, `=財務報表!B33`, `=B5-C5`, `=財務報表!C45`, `=財務報表!C46`],
-    ['3月', `=財務報表!C18`, `=財務報表!B33`, `=B6-C6`, `=財務報表!C45`, `=財務報表!C46`],
-    ['4月', `=財務報表!C18`, `=財務報表!B33`, `=B7-C7`, `=財務報表!C45`, `=財務報表!C46`],
-    ['5月', `=財務報表!C18`, `=財務報表!B33`, `=B8-C8`, `=財務報表!C45`, `=財務報表!C46`],
-    ['6月', `=財務報表!C18`, `=財務報表!B33`, `=B9-C9`, `=財務報表!C45`, `=財務報表!C46`],
-    ['7月', `=財務報表!C18`, `=財務報表!B33`, `=B10-C10`, `=財務報表!C45`, `=財務報表!C46`],
-    ['8月', `=財務報表!C18`, `=財務報表!B33`, `=B11-C11`, `=財務報表!C45`, `=財務報表!C46`],
-    ['9月', `=財務報表!C18`, `=財務報表!B33`, `=B12-C12`, `=財務報表!C45`, `=財務報表!C46`],
-    ['10月', `=財務報表!C18`, `=財務報表!B33`, `=B13-C13`, `=財務報表!C45`, `=財務報表!C46`],
-    ['11月', `=財務報表!C18`, `=財務報表!B33`, `=B14-C14`, `=財務報表!C45`, `=財務報表!C46`],
-    ['12月', `=財務報表!C18`, `=財務報表!B33`, `=B15-C15`, `=財務報表!C45`, `=財務報表!C46`],
+    ['1月', `=財務報表!C32`, `=財務報表!B47`, `=B4-C4`, `=財務報表!D59`, `=財務報表!D60`],
+    ['2月', `=財務報表!C32`, `=財務報表!B47`, `=B5-C5`, `=財務報表!D59`, `=財務報表!D60`],
+    ['3月', `=財務報表!C32`, `=財務報表!B47`, `=B6-C6`, `=財務報表!D59`, `=財務報表!D60`],
+    ['4月', `=財務報表!C32`, `=財務報表!B47`, `=B7-C7`, `=財務報表!D59`, `=財務報表!D60`],
+    ['5月', `=財務報表!C32`, `=財務報表!B47`, `=B8-C8`, `=財務報表!D59`, `=財務報表!D60`],
+    ['6月', `=財務報表!C32`, `=財務報表!B47`, `=B9-C9`, `=財務報表!D59`, `=財務報表!D60`],
+    ['7月', `=財務報表!C32`, `=財務報表!B47`, `=B10-C10`, `=財務報表!D59`, `=財務報表!D60`],
+    ['8月', `=財務報表!C32`, `=財務報表!B47`, `=B11-C11`, `=財務報表!D59`, `=財務報表!D60`],
+    ['9月', `=財務報表!C32`, `=財務報表!B47`, `=B12-C12`, `=財務報表!D59`, `=財務報表!D60`],
+    ['10月', `=財務報表!C32`, `=財務報表!B47`, `=B13-C13`, `=財務報表!D59`, `=財務報表!D60`],
+    ['11月', `=財務報表!C32`, `=財務報表!B47`, `=B14-C14`, `=財務報表!D59`, `=財務報表!D60`],
+    ['12月', `=財務報表!C32`, `=財務報表!B47`, `=B15-C15`, `=財務報表!D59`, `=財務報表!D60`],
     ['年度總計', `=SUM(B4:B15)`, `=SUM(C4:C15)`, `=SUM(D4:D15)`, `=SUM(E4:E15)`, `=SUM(F4:F15)`],
     ['', '', '', '', '', ''],
     ['📊 季度分析', '', '', '', '', ''],
@@ -913,33 +961,33 @@ function exportToExcel() {
   
   XLSX.utils.book_append_sheet(wb, ws3, '月度預測');
   
-  // 創建成本分析工作表
+  // 創建成本分析工作表 (修正公式參照)
   const costAnalysisData = [
     ['💰 成本結構分析', '', '', '', '', ''],
     ['', '', '', '', '', ''],
     ['成本分類', '月支出', '年支出', '佔總支出比', '可優化程度', '優化建議'],
-    ['固定成本', `=財務報表!B22+財務報表!B23+財務報表!B26+財務報表!B27+財務報表!B29`, `=B4*12`, `=B4/財務報表!B33*100`, '低', '長期合約，議價空間有限'],
-    ['變動成本', `=財務報表!B24+財務報表!B25+財務報表!B28+財務報表!B30+財務報表!B31+財務報表!B32`, `=B5*12`, `=B5/財務報表!B33*100`, '高', '可透過管理優化'],
+    ['固定成本', `=財務報表!B36+財務報表!B37+財務報表!B40+財務報表!B41+財務報表!B43`, `=B4*12`, `=B4/財務報表!B47*100`, '低', '長期合約，議價空間有限'],
+    ['變動成本', `=財務報表!B38+財務報表!B39+財務報表!B42+財務報表!B44+財務報表!B45+財務報表!B46`, `=B5*12`, `=B5/財務報表!B47*100`, '高', '可透過管理優化'],
     ['', '', '', '', '', ''],
     ['🔍 成本明細分析', '', '', '', '', ''],
     ['支出項目', '月支出', '年支出', '佔比', '控制難度', '優化策略'],
-    ['房租', t('rent'), `=B8*12`, `=B8/財務報表!B33*100`, '困難', '長期合約'],
-    ['車位費', t('parkingFee'), `=B9*12`, `=B9/財務報表!B33*100`, '困難', '必要支出'],
-    ['水電費', `=財務報表!B24+財務報表!B25`, `=B10*12`, `=B10/財務報表!B33*100`, '中等', '節能設備'],
-    ['網路費', t('internetBill'), `=B11*12`, `=B11/財務報表!B33*100`, '容易', '合約比較'],
-    ['會計費', t('accountingFee'), `=B12*12`, `=B12/財務報表!B33*100`, '容易', '服務比較'],
-    ['清潔費', t('cleaningFee'), `=B13*12`, `=B13/財務報表!B33*100`, '中等', '頻率調整'],
-    ['保險費', t('insurance'), `=B14*12`, `=B14/財務報表!B33*100`, '容易', '方案比較'],
-    ['設備維護費', t('maintenance'), `=B15*12`, `=B15/財務報表!B33*100`, '中等', '預防保養'],
-    ['廣告耗材', t('marketingExpense'), `=B16*12`, `=B16/財務報表!B33*100`, '容易', '效果評估'],
-    ['其他雜支', t('miscExpense'), `=B17*12`, `=B17/財務報表!B33*100`, '容易', '預算控制'],
+    ['房租', t('rent'), `=B8*12`, `=B8/財務報表!B47*100`, '困難', '長期合約'],
+    ['車位費', t('parkingFee'), `=B9*12`, `=B9/財務報表!B47*100`, '困難', '必要支出'],
+    ['水電費', `=財務報表!B38+財務報表!B39`, `=B10*12`, `=B10/財務報表!B47*100`, '中等', '節能設備'],
+    ['網路費', t('internetBill'), `=B11*12`, `=B11/財務報表!B47*100`, '容易', '合約比較'],
+    ['會計費', t('accountingFee'), `=B12*12`, `=B12/財務報表!B47*100`, '容易', '服務比較'],
+    ['清潔費', t('cleaningFee'), `=B13*12`, `=B13/財務報表!B47*100`, '中等', '頻率調整'],
+    ['保險費', t('insurance'), `=B14*12`, `=B14/財務報表!B47*100`, '容易', '方案比較'],
+    ['設備維護費', t('maintenance'), `=B15*12`, `=B15/財務報表!B47*100`, '中等', '預防保養'],
+    ['廣告耗材', t('marketingExpense'), `=B16*12`, `=B16/財務報表!B47*100`, '容易', '效果評估'],
+    ['其他雜支', t('miscExpense'), `=B17*12`, `=B17/財務報表!B47*100`, '容易', '預算控制'],
     ['總支出', currentResults.totalCost, `=B18*12`, '100%', '', ''],
     ['', '', '', '', '', ''],
     ['📈 成本效益分析', '', '', '', '', ''],
     ['效益指標', '數值', '單位', '目標值', '評估', '說明'],
-    ['成本佔營收比', `=財務報表!B33/財務報表!C18*100`, '%', '<70%', currentResults.totalCost/currentResults.totalRevenue*100 < 0.7 ? '優秀' : '待改善', '成本控制指標'],
-    ['固定成本比', `=B4/財務報表!B33*100`, '%', '<60%', (t('rent')+t('parkingFee')+t('internetBill')+t('accountingFee')+t('insurance'))/currentResults.totalCost*100 < 0.6 ? '良好' : '偏高', '固定成本控制'],
-    ['變動成本比', `=B5/財務報表!B33*100`, '%', '<40%', (t('waterBill')+t('electricBill')+t('cleaningFee')+t('maintenance')+t('marketingExpense')+t('miscExpense'))/currentResults.totalCost*100 < 0.4 ? '良好' : '偏高', '變動成本控制']
+    ['成本佔營收比', `=財務報表!B47/財務報表!C32*100`, '%', '<70%', currentResults.totalCost/currentResults.totalRevenue*100 < 0.7 ? '優秀' : '待改善', '成本控制指標'],
+    ['固定成本比', `=B4/財務報表!B47*100`, '%', '<60%', (t('rent')+t('parkingFee')+t('internetBill')+t('accountingFee')+t('insurance'))/currentResults.totalCost*100 < 0.6 ? '良好' : '偏高', '固定成本控制'],
+    ['變動成本比', `=B5/財務報表!B47*100`, '%', '<40%', (t('waterBill')+t('electricBill')+t('cleaningFee')+t('maintenance')+t('marketingExpense')+t('miscExpense'))/currentResults.totalCost*100 < 0.4 ? '良好' : '偏高', '變動成本控制']
   ];
   
   const ws4 = XLSX.utils.aoa_to_sheet(costAnalysisData);
@@ -949,15 +997,15 @@ function exportToExcel() {
   
   XLSX.utils.book_append_sheet(wb, ws4, '成本分析');
   
-  // 創建營收分析工作表
+  // 創建營收分析工作表 (修正公式參照)
   const revenueAnalysisData = [
     ['📊 營收結構分析', '', '', '', '', ''],
     ['', '', '', '', '', ''],
     ['收入來源', '月收入', '年收入', '佔比', '成長潛力', '穩定性'],
-    ['分租收入', currentResults.rentalIncome, `=B4*12`, `=B4/財務報表!C18*100`, '低', '高'],
-    ['來電客分潤', currentResults.clientRevenue, `=B5*12`, `=B5/財務報表!C18*100`, '高', '中'],
-    ['課程收入', currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue, `=B6*12`, `=B6/財務報表!C18*100`, '中', '中'],
-    ['教室租金', currentResults.privateClassRent, `=B7*12`, `=B7/財務報表!C18*100`, '低', '中'],
+    ['分租收入', currentResults.rentalIncome, `=B4*12`, `=B4/財務報表!C32*100`, '低', '高'],
+    ['來電客分潤', currentResults.clientRevenue, `=B5*12`, `=B5/財務報表!C32*100`, '高', '中'],
+    ['課程收入', currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue, `=B6*12`, `=B6/財務報表!C32*100`, '中', '中'],
+    ['教室租金', currentResults.privateClassRent, `=B7*12`, `=B7/財務報表!C32*100`, '低', '中'],
     ['總營收', currentResults.totalRevenue, `=B8*12`, '100%', '', ''],
     ['', '', '', '', '', ''],
     ['🎯 收入成長策略', '', '', '', '', ''],
