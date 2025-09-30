@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美業共享工作室試算工具</title>
+<style>
+  body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #e4ebf7);
+    margin: 0; padding: 0;
+    color: #333;
+  }
+  header {
+    background: #2563eb;
+    color: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  main {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 15px;
+  }
+  h1, h2, h3 { margin-top: 0; }
+  section {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(6px);
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    padding: 25px 30px;
+    margin-bottom: 30px;
+  }
+  .param-group { margin-bottom: 25px; }
+  .param-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-left: 5px solid #2563eb;
+    padding-left: 10px;
+    margin-bottom: 15px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    gap: 20px 25px;
+  }
+  label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+  input[type="number"]:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 6px rgba(37,99,235,0.3);
+  }
+  button {
+    background: #2563eb;
+    color: #fff;
+    padding: 14px 28px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  button:hover { background: #1e4dc7; }
+
+  .result-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 25px;
+    margin-top: 25px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    min-height: 200px;
+  }
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #2563eb;
+    font-size: 1.3rem;
+  }
+  .highlight {
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 1.1rem;
+  }
+  .step-title {
+    font-weight: 700;
+    color: #059669;
+    font-size: 1.1rem;
+    margin: 15px 0 8px 0;
+    border-left: 4px solid #059669;
+    padding-left: 8px;
+  }
+  .final-result {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 18px;
+    font-weight: 700;
+    color: #92400e;
+    font-size: 1.1rem;
+  }
+  .meiling-result {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    border: 2px solid #3b82f6;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 12px;
+    font-weight: 700;
+    color: #1e40af;
+    font-size: 1.3rem;
+  }
+  .profit-step {
+    background: #f8fafc;
+    border-left: 4px solid #e2e8f0;
+    padding: 10px 15px;
+    margin: 6px 0;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .sensitivity-card {
+    background: #f0f9ff;
+    border: 2px solid #0ea5e9;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+  }
+  .comparison-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 1rem;
+  }
+  .comparison-row:last-child {
+    border-bottom: none;
+  }
+  
+  /* 平板版優化 (768px - 1024px) */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    main {
+      max-width: 900px;
+      padding: 0 20px;
+    }
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px 20px;
+    }
+    .result-box {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .card {
+      min-height: 180px;
+      padding: 20px;
+    }
+    .final-result, .meiling-result {
+      font-size: 1.2rem;
+      padding: 15px;
+    }
+  }
+
+  /* 手機版優化 (768px以下) */
+  @media (max-width: 768px) {
+    header {
+      padding: 20px 15px;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    header p {
+      font-size: 0.9rem;
+    }
+    
+    main {
+      padding: 0 10px;
+      margin: 20px auto;
+    }
+    
+    section {
+      padding: 20px 15px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+    
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .result-box {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .card {
+      min-height: auto;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    
+    .param-title {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    
+    label {
+      font-size: 0.85rem;
+    }
+    
+    input[type="number"] {
+      padding: 10px 12px;
+      font-size: 1rem;
+    }
+    
+    button {
+      padding: 12px 20px;
+      font-size: 0.95rem;
+    }
+    
+    .final-result, .meiling-result {
+      font-size: 1rem;
+      padding: 15px;
+      margin-top: 12px;
+    }
+    
+    .profit-step {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+    
+    .step-title {
+      font-size: 1rem;
+      margin: 12px 0 6px 0;
+    }
+    
+    .sensitivity-card {
+      padding: 15px;
+    }
+    
+    .comparison-row {
+      font-size: 0.9rem;
+      padding: 8px 0;
+    }
+  }
+
+  /* 小手機版優化 (480px以下) */
+  @media (max-width: 480px) {
+    header {
+      padding: 15px 10px;
+    }
+    header h1 {
+      font-size: 1.6rem;
+    }
+    header p {
+      font-size: 0.8rem;
+    }
+    
+    main {
+      padding: 0 8px;
+      margin: 15px auto;
+    }
+    
+    section {
+      padding: 15px 12px;
+      margin-bottom: 15px;
+    }
+    
+    .card {
+      padding: 15px;
+    }
+    
+    .card h3 {
+      font-size: 1.1rem;
+    }
+    
+    .param-title {
+      font-size: 1rem;
+    }
+    
+    label {
+      font-size: 0.8rem;
+    }
+    
+    input[type="number"] {
+      padding: 8px 10px;
+      font-size: 0.95rem;
+    }
+    
+    button {
+      padding: 10px 15px;
+      font-size: 0.9rem;
+    }
+    
+    .final-result, .meiling-result {
+      font-size: 0.95rem;
+      padding: 12px;
+    }
+    
+    .profit-step {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+    }
+    
+    .step-title {
+      font-size: 0.95rem;
+    }
+    
+    .sensitivity-card {
+      padding: 12px;
+    }
+    
+    .comparison-row {
+      font-size: 0.85rem;
+    }
+    
+    footer {
+      padding: 15px 10px !important;
+    }
+    
+    footer p {
+      font-size: 0.8rem !important;
+    }
+  }
+
+  /* 大螢幕優化 (1200px以上) */
+  @media (min-width: 1200px) {
+    main {
+      max-width: 1400px;
+    }
+    
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px 28px;
+    }
+    
+    .result-box {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .card {
+      min-height: 220px;
+      padding: 30px;
+    }
+    
+    .final-result, .meiling-result {
+      font-size: 1.4rem;
+      padding: 20px;
+    }
+    
+    .param-title {
+      font-size: 1.3rem;
+    }
+    
+    input[type="number"] {
+      padding: 14px 16px;
+      font-size: 1.1rem;
+    }
+    
+    button {
+      padding: 16px 32px;
+      font-size: 1.1rem;
+    }
+  }
+
+  /* 超寬螢幕優化 (1600px以上) */
+  @media (min-width: 1600px) {
+    main {
+      max-width: 1600px;
+    }
+    
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px 30px;
+    }
+    
+    .result-box {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 35px;
+    }
+    
+    .card {
+      min-height: 250px;
+      padding: 35px;
+    }
+    
+    .final-result, .meiling-result {
+      font-size: 1.5rem;
+      padding: 22px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>美業共享工作室試算工具</h1>
+  <p>2025 年版｜分區顯示收入與支出，讓投資更透明</p>
+</header>
+
+<main>
+  <!-- 輸入區 -->
+  <section>
+    <h2>輸入試算參數</h2>
+
+    <div class="param-group">
+      <div class="param-title">👩‍🔧 技師與來電客</div>
+      <div class="grid">
+        <div><label>技師人數</label><input type="number" id="technicians" value="5" min="1" max="8"></div>
+        <div><label>平均來電客 / 技師 / 月</label><input type="number" id="clientsPerTech" value="40"></div>
+        <div><label>客單價（元）</label><input type="number" id="pricePerClient" value="2000"></div>
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-title">📚 課程相關</div>
+      <div class="grid">
+        <div><label>公流量課程場次 / 月</label><input type="number" id="publicCourses" value="2"></div>
+        <div><label>公流量課程學生 / 場</label><input type="number" id="studentsPerPublic" value="10"></div>
+        <div><label>混合課程場次 / 月</label><input type="number" id="mixedCourses" value="1"></div>
+        <div><label>混合課程公司導入學生 / 場</label><input type="number" id="companyStudents" value="6"></div>
+        <div><label>課程學費 / 人（元）</label><input type="number" id="courseFee" value="10000"></div>
+        <div><label>私流量講師租用天數 / 月</label><input type="number" id="privateDays" value="10"></div>
+        <div><label>教室日租價（元/天）</label><input type="number" id="classroomRent" value="1000"></div>
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-title">🏢 分租空間</div>
+      <div class="grid">
+        <div><label>美甲桌數量</label><input type="number" id="nailDesks" value="3"></div>
+        <div><label>美甲桌月租（元）</label><input type="number" id="nailDeskRent" value="5000"></div>
+        <div><label>美容床數量</label><input type="number" id="beds" value="3"></div>
+        <div><label>美容床月租（元）</label><input type="number" id="bedRent" value="5000"></div>
+        <div><label>大包箱數量</label><input type="number" id="boxes" value="2"></div>
+        <div><label>大包箱月租（元）</label><input type="number" id="boxRent" value="12000"></div>
+        <div><label>車位數量</label><input type="number" id="parkingSpots" value="1"></div>
+        <div><label>車位月租（元）</label><input type="number" id="parkingRent" value="2500"></div>
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-title">💵 支出與成本</div>
+      <div class="grid">
+        <div><label>房租（元/月）</label><input type="number" id="rent" value="35000"></div>
+        <div><label>車位費（元/月）</label><input type="number" id="parkingFee" value="3000"></div>
+        <div><label>水費（元/月）</label><input type="number" id="waterBill" value="2000"></div>
+        <div><label>電費（元/月）</label><input type="number" id="electricBill" value="8000"></div>
+        <div><label>網路費（元/月）</label><input type="number" id="internetBill" value="1500"></div>
+        <div><label>會計費（元/月）</label><input type="number" id="accountingFee" value="3000"></div>
+        <div><label>清潔費（元/月）</label><input type="number" id="cleaningFee" value="5000"></div>
+        <div><label>保險費（元/月）</label><input type="number" id="insurance" value="2000"></div>
+        <div><label>設備維護費（元/月）</label><input type="number" id="maintenance" value="3000"></div>
+        <div><label>廣告耗材（元/月）</label><input type="number" id="marketingExpense" value="5000"></div>
+        <div><label>其他雜支（元/月）</label><input type="number" id="miscExpense" value="5000"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin-top: 20px;">
+      <button onclick="calculate()" style="flex: 1;">計算結果</button>
+      <button onclick="resetAll()" style="flex: 1; background: #6b7280;">重置所有數值</button>
+    </div>
+  </section>
+
+  <!-- 結果區 -->
+  <section>
+    <h2>試算結果</h2>
+    <div class="result-box">
+      <div class="card" id="incomeBox">
+        <h3>📈 收入</h3>
+        <p>請輸入參數並點擊「計算結果」</p>
+      </div>
+      <div class="card" id="expenseBox">
+        <h3>📉 支出</h3>
+        <p>請輸入參數並點擊「計算結果」</p>
+      </div>
+      <div class="card" id="profitBox">
+        <h3>💰 盈餘與分潤</h3>
+        <p>請輸入參數並點擊「計算結果」</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 敏感度分析 -->
+  <section>
+    <h2>🔍 敏感度分析</h2>
+    <div class="param-group">
+      <div class="param-title">關鍵參數調整測試</div>
+      <div class="grid">
+        <div><label>技師人數調整</label><input type="number" id="techAdjust" value="5" min="1" max="8"></div>
+        <div><label>客單價調整（元）</label><input type="number" id="priceAdjust" value="2000" min="1000" max="5000"></div>
+        <div><label>課程場次調整</label><input type="number" id="courseAdjust" value="2" min="0" max="10"></div>
+      </div>
+    </div>
+    <button onclick="sensitivityAnalysis()">敏感度分析</button>
+    <div id="sensitivityResults" style="margin-top: 20px;"></div>
+  </section>
+
+  <!-- 報表下載 -->
+  <section>
+    <h2>📄 報表下載</h2>
+    <div class="param-group">
+      <div class="param-title">生成完整報表</div>
+      <p>點擊下方按鈕下載完整的試算報表，包含所有收入、支出、分潤分析及年度預測。</p>
+      <div style="display: flex; gap: 15px; margin-top: 20px;">
+        <button onclick="exportToPDF()" style="background: #dc2626; flex: 1;">
+          📄 下載 PDF 報表
+        </button>
+        <button onclick="exportToExcel()" style="background: #059669; flex: 1;">
+          📊 下載 Excel 報表
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 版權聲明 -->
+<footer style="background: #1f2937; color: #fff; text-align: center; padding: 20px; margin-top: 40px; border-top: 3px solid #2563eb;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6;">
+      <strong>⚠️ 版權聲明</strong><br>
+      本試算工具為蔡濬瑒個人開發，受著作權法保護。<br>
+      未經授權禁止複製、轉載、商用或任何形式的二次開發。<br>
+      如有使用需求，請聯繫開發者取得授權。<br>
+      <span style="color: #fbbf24; font-weight: bold;">蔡濬瑒製 v1.0</span>
+    </p>
+  </div>
+</footer>
+
+<!-- 引入必要的庫 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+function t(id){ return parseFloat(document.getElementById(id).value)||0; }
+
+function resetAll() {
+  // 重置所有輸入值到預設值
+  document.getElementById('technicians').value = 5;
+  document.getElementById('clientsPerTech').value = 40;
+  document.getElementById('pricePerClient').value = 2000;
+  document.getElementById('publicCourses').value = 2;
+  document.getElementById('studentsPerPublic').value = 10;
+  document.getElementById('mixedCourses').value = 1;
+  document.getElementById('companyStudents').value = 6;
+  document.getElementById('courseFee').value = 10000;
+  document.getElementById('privateDays').value = 10;
+  document.getElementById('classroomRent').value = 1000;
+  document.getElementById('nailDesks').value = 3;
+  document.getElementById('nailDeskRent').value = 5000;
+  document.getElementById('beds').value = 3;
+  document.getElementById('bedRent').value = 5000;
+  document.getElementById('boxes').value = 2;
+  document.getElementById('boxRent').value = 12000;
+  document.getElementById('parkingSpots').value = 1;
+  document.getElementById('parkingRent').value = 2500;
+  document.getElementById('rent').value = 35000;
+  document.getElementById('parkingFee').value = 3000;
+  document.getElementById('waterBill').value = 2000;
+  document.getElementById('electricBill').value = 8000;
+  document.getElementById('internetBill').value = 1500;
+  document.getElementById('accountingFee').value = 3000;
+  document.getElementById('cleaningFee').value = 5000;
+  document.getElementById('insurance').value = 2000;
+  document.getElementById('maintenance').value = 3000;
+  document.getElementById('marketingExpense').value = 5000;
+  document.getElementById('miscExpense').value = 5000;
+  
+  // 重置敏感度分析
+  document.getElementById('techAdjust').value = 5;
+  document.getElementById('priceAdjust').value = 2000;
+  document.getElementById('courseAdjust').value = 2;
+  
+  // 清空結果
+  document.getElementById('incomeBox').innerHTML = '<h3>📈 收入</h3><p>請輸入參數並點擊「計算結果」</p>';
+  document.getElementById('expenseBox').innerHTML = '<h3>📉 支出</h3><p>請輸入參數並點擊「計算結果」</p>';
+  document.getElementById('profitBox').innerHTML = '<h3>💰 盈餘與分潤</h3><p>請輸入參數並點擊「計算結果」</p>';
+  document.getElementById('sensitivityResults').innerHTML = '';
+  
+  // 清空全域變數
+  currentResults = {};
+  
+  alert('所有數值已重置為預設值！');
+}
+
+// 全域變數儲存計算結果
+let currentResults = {};
+
+function exportToPDF() {
+  // 確保已經計算過結果
+  if (!currentResults.totalRevenue) {
+    alert('請先點擊「計算結果」生成數據！');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // 設定支援中文的字體
+  doc.setFont('helvetica');
+  
+  // 添加中文字體支援
+  try {
+    // 嘗試使用系統字體
+    doc.setFont('helvetica', 'normal');
+  } catch (e) {
+    console.log('字體設定錯誤，使用預設字體');
+  }
+  
+  // 標題
+  doc.setFontSize(20);
+  doc.text('Beauty Studio Financial Report', 20, 20);
+  
+  doc.setFontSize(12);
+  doc.text('Generated: ' + new Date().toLocaleDateString('en-US'), 20, 35);
+  doc.text('Period: 2025', 20, 45);
+  
+  let yPosition = 60;
+  
+  // 輸入參數
+  doc.setFontSize(16);
+  doc.text('Input Parameters', 20, yPosition);
+  yPosition += 10;
+  
+  doc.setFontSize(10);
+  doc.text(`Technicians: ${t('technicians')}`, 20, yPosition);
+  doc.text(`Price per Client: $${t('pricePerClient')}`, 100, yPosition);
+  yPosition += 8;
+  
+  doc.text(`Courses per Month: ${t('publicCourses')}`, 20, yPosition);
+  doc.text(`Nail Desks: ${t('nailDesks')}`, 100, yPosition);
+  yPosition += 8;
+  
+  doc.text(`Beauty Beds: ${t('beds')}`, 20, yPosition);
+  doc.text(`Large Rooms: ${t('boxes')}`, 100, yPosition);
+  yPosition += 15;
+  
+  // 收入分析
+  doc.setFontSize(16);
+  doc.text('Revenue Analysis', 20, yPosition);
+  yPosition += 10;
+  
+  doc.setFontSize(10);
+  doc.text(`Rental Income: $${currentResults.rentalIncome.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Client Revenue (3/7): $${currentResults.clientRevenue.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Course Income (3/7): $${(currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue).toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Classroom Rent: $${currentResults.privateClassRent.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  
+  doc.setFontSize(12);
+  doc.text(`Total Revenue: $${currentResults.totalRevenue.toLocaleString()}`, 20, yPosition);
+  yPosition += 15;
+  
+  // 支出分析
+  doc.setFontSize(16);
+  doc.text('Expense Analysis', 20, yPosition);
+  yPosition += 10;
+  
+  doc.setFontSize(10);
+  doc.text(`Rent: $${t('rent').toLocaleString()}`, 20, yPosition);
+  doc.text(`Parking: $${t('parkingFee').toLocaleString()}`, 100, yPosition);
+  yPosition += 8;
+  doc.text(`Utilities: $${(t('waterBill') + t('electricBill')).toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Accounting: $${t('accountingFee').toLocaleString()}`, 20, yPosition);
+  doc.text(`Cleaning: $${t('cleaningFee').toLocaleString()}`, 100, yPosition);
+  yPosition += 8;
+  doc.text(`Marketing Materials: $${t('marketingExpense').toLocaleString()}`, 20, yPosition);
+  doc.text(`Miscellaneous: $${t('miscExpense').toLocaleString()}`, 100, yPosition);
+  yPosition += 8;
+  
+  doc.setFontSize(12);
+  doc.text(`Total Expenses: $${currentResults.totalCost.toLocaleString()}`, 20, yPosition);
+  yPosition += 15;
+  
+  // 分潤分析
+  doc.setFontSize(16);
+  doc.text('Profit Distribution', 20, yPosition);
+  yPosition += 10;
+  
+  doc.setFontSize(10);
+  doc.text(`Net Profit: $${currentResults.netProfit.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Marketing Bonus (20%): $${currentResults.marketingBonus.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Meiling Share (95%): $${currentResults.share95.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Team Share (5%): $${currentResults.share5.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  
+  doc.setFontSize(12);
+  doc.text(`Team Total Income: $${currentResults.youTotal.toLocaleString()}`, 20, yPosition);
+  yPosition += 8;
+  doc.text(`Meiling Total Income: $${currentResults.share95.toLocaleString()}`, 20, yPosition);
+  yPosition += 15;
+  
+  
+  // 下載PDF
+  doc.save('Beauty_Studio_Financial_Report.pdf');
+}
+
+function exportToExcel() {
+  // 確保已經計算過結果
+  if (!currentResults.totalRevenue) {
+    alert('請先點擊「計算結果」生成數據！');
+    return;
+  }
+
+  // 創建工作簿
+  const wb = XLSX.utils.book_new();
+  
+  // 創建主要報表工作表
+  const reportData = [
+    // 標題區
+    ['美業共享工作室財務報表 2025', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['報告期間', '2025年', '', '', '生成日期', new Date().toLocaleDateString('zh-TW'), ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 輸入參數區
+    ['📋 營運參數設定', '', '', '', '', '', ''],
+    ['項目', '數值', '單位', '說明', '', '', ''],
+    ['技師人數', t('technicians'), '人', '工作室技師總數', '', '', ''],
+    ['平均來電客/技師/月', t('clientsPerTech'), '人', '每位技師每月服務客戶數', '', '', ''],
+    ['客單價', t('pricePerClient'), '元', '每位客戶平均消費金額', '', '', ''],
+    ['公流量課程場次/月', t('publicCourses'), '場', '每月公開課程舉辦場次', '', '', ''],
+    ['公流量課程學生/場', t('studentsPerPublic'), '人', '每場公開課程學員人數', '', '', ''],
+    ['混合課程場次/月', t('mixedCourses'), '場', '每月混合課程舉辦場次', '', '', ''],
+    ['混合課程公司導入學生/場', t('companyStudents'), '人', '每場混合課程公司學員數', '', '', ''],
+    ['課程學費/人', t('courseFee'), '元', '每人課程收費標準', '', '', ''],
+    ['私流量講師租用天數/月', t('privateDays'), '天', '每月私人講師租用天數', '', '', ''],
+    ['教室日租價', t('classroomRent'), '元', '教室每日租金', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 空間配置區
+    ['🏢 空間配置與租金', '', '', '', '', '', ''],
+    ['項目', '數量', '月租單價', '月租總額', '年租總額', '利用率', '備註'],
+    ['美甲桌', t('nailDesks'), t('nailDeskRent'), `=B17*C17`, `=D17*12`, '100%', '固定租用'],
+    ['美容床', t('beds'), t('bedRent'), `=B18*C18`, `=D18*12`, '100%', '固定租用'],
+    ['大包箱', t('boxes'), t('boxRent'), `=B19*C19`, `=D19*12`, '100%', '固定租用'],
+    ['車位', t('parkingSpots'), t('parkingRent'), `=B20*C20`, `=D20*12`, '100%', '固定租用'],
+    ['空間租金小計', '', '', `=SUM(D17:D20)`, `=SUM(E17:E20)`, '', ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 收入分析區
+    ['📈 收入結構分析', '', '', '', '', '', ''],
+    ['收入項目', '計算公式', '月收入', '年收入', '佔比', '成長潛力', '備註'],
+    ['公司分租收入', '空間租金總計', currentResults.rentalIncome, `=C24*12`, `=C24/$C$28`, '穩定', '固定租金收入'],
+    ['來電客公司分潤', '技師數×客數×客單價×3/7', currentResults.clientRevenue, `=C25*12`, `=C25/$C$28`, '高', '主要成長動能'],
+    ['課程收入(3/7抽成)', '課程場次×學員×學費×3/7', currentResults.publicCourseRevenue + currentResults.mixedCourseRevenue, `=C26*12`, `=C26/$C$28`, '中', '季節性波動'],
+    ['教室租金(私流量)', '租用天數×日租價', currentResults.privateClassRent, `=C27*12`, `=C27/$C$28`, '低', '補充收入'],
+    ['總營收', '收入項目加總', currentResults.totalRevenue, `=C28*12`, '100%', '', ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 支出分析區
+    ['📉 支出結構分析', '', '', '', '', '', ''],
+    ['支出項目', '月支出', '年支出', '佔總支出比', '可控制性', '優化建議', '備註'],
+    ['房租', t('rent'), `=B32*12`, `=B32/$B$43`, '固定', '長期合約', '最大支出項目'],
+    ['車位費', t('parkingFee'), `=B33*12`, `=B33/$B$43`, '固定', '長期合約', '必要支出'],
+    ['水費', t('waterBill'), `=B34*12`, `=B34/$B$43`, '變動', '節水措施', '季節性波動'],
+    ['電費', t('electricBill'), `=B35*12`, `=B35/$B$43`, '變動', '節能設備', '夏季高峰'],
+    ['網路費', t('internetBill'), `=B36*12`, `=B36/$B$43`, '固定', '合約優化', '必要支出'],
+    ['會計費', t('accountingFee'), `=B37*12`, `=B37/$B$43`, '固定', '服務比較', '專業服務'],
+    ['清潔費', t('cleaningFee'), `=B38*12`, `=B38/$B$43`, '變動', '頻率調整', '可優化'],
+    ['保險費', t('insurance'), `=B39*12`, `=B39/$B$43`, '固定', '方案比較', '風險管控'],
+    ['設備維護費', t('maintenance'), `=B40*12`, `=B40/$B$43`, '變動', '預防保養', '設備管理'],
+    ['廣告耗材', t('marketingExpense'), `=B41*12`, `=B41/$B$43`, '變動', '效果評估', '行銷投資'],
+    ['其他雜支', t('miscExpense'), `=B42*12`, `=B42/$B$43`, '變動', '預算控制', '彈性支出'],
+    ['總支出', currentResults.totalCost, `=B43*12`, '100%', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 分潤分析區
+    ['💰 分潤機制分析', '', '', '', '', '', ''],
+    ['分潤項目', '計算基礎', '月金額', '年金額', '分配比例', '負責人', '備註'],
+    ['稅後淨利', '總營收-總支出', currentResults.netProfit, `=C47*12`, '100%', '公司', '分潤基礎'],
+    ['行銷分潤', '淨利×20%', currentResults.marketingBonus, `=C48*12`, '20%', '濬瑒+子菲', '行銷獎勵'],
+    ['剩餘利潤', '淨利-行銷分潤', currentResults.remainingProfit, `=C49*12`, '80%', '公司', '股權分潤基礎'],
+    ['梅鈴股權分紅', '剩餘利潤×95%', currentResults.share95, `=C50*12`, '76%', '梅鈴', '大股東分潤'],
+    ['團隊股權分紅', '剩餘利潤×5%', currentResults.share5, `=C51*12`, '4%', '濬瑒+子菲', '小股東分潤'],
+    ['', '', '', '', '', '', ''],
+    
+    // 總收益摘要
+    ['🎯 個人收益摘要', '', '', '', '', '', ''],
+    ['受益人', '股權分紅', '行銷分潤', '總收益', '年收益', '佔比', ''],
+    ['濬瑒+子菲', currentResults.share5, currentResults.marketingBonus, currentResults.youTotal, `=D55*12`, `=D55/$D$56`, ''],
+    ['梅鈴', currentResults.share95, 0, currentResults.share95, `=D56*12`, `=D56/$D$56`, ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 財務指標
+    ['📊 財務健康指標', '', '', '', '', '', ''],
+    ['指標項目', '數值', '單位', '標準值', '評估', '說明', ''],
+    ['毛利率', `=($C$28-$B$43)/$C$28*100`, '%', '>30%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.3 ? '良好' : '待改善', '獲利能力指標', ''],
+    ['淨利率', `=$C$47/$C$28*100`, '%', '>20%', currentResults.netProfit/currentResults.totalRevenue*100 > 0.2 ? '優秀' : '一般', '營運效率指標', ''],
+    ['支出佔比', `=$B$43/$C$28*100`, '%', '<80%', currentResults.totalCost/currentResults.totalRevenue*100 < 0.8 ? '良好' : '偏高', '成本控制指標', ''],
+    ['投資回報率', `=$D$55/$B$32*100`, '%', '>100%', currentResults.youTotal/t('rent')*100 > 100 ? '優秀' : '一般', '投資效益指標', ''],
+    ['', '', '', '', '', '', ''],
+    
+    // 版權聲明
+    ['', '', '', '', '', '', ''],
+    ['版權聲明', '', '', '', '', '', ''],
+    ['本報表由蔡濬瑒開發製作 v1.0', '', '', '', '', '', ''],
+    ['未經授權禁止複製或商用', '', '', '', '', '', '']
+  ];
+  
+  // 創建主要報表工作表
+  const ws = XLSX.utils.aoa_to_sheet(reportData);
+  
+  // 設定列寬
+  ws['!cols'] = [
+    {wch: 20}, // A列
+    {wch: 15}, // B列
+    {wch: 12}, // C列
+    {wch: 15}, // D列
+    {wch: 15}, // E列
+    {wch: 12}, // F列
+    {wch: 20}  // G列
+  ];
+  
+  // 設定行高
+  ws['!rows'] = Array(60).fill().map(() => ({hpt: 18}));
+  
+  // 合併標題單元格
+  ws['!merges'] = [
+    {s: {r: 0, c: 0}, e: {r: 0, c: 6}}, // 主標題
+    {s: {r: 1, c: 0}, e: {r: 1, c: 6}}  // 空行
+  ];
+  
+  XLSX.utils.book_append_sheet(wb, ws, '財務報表');
+  
+  // 創建敏感度分析工作表
+  const sensitivityData = [
+    ['🔍 敏感度分析', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['參數調整', '原始值', '調整值', '收入變化', '收益變化', '變化率'],
+    ['技師人數', t('technicians'), t('techAdjust'), '', '', ''],
+    ['客單價', t('pricePerClient'), t('priceAdjust'), '', '', ''],
+    ['課程場次', t('publicCourses'), t('courseAdjust'), '', '', ''],
+    ['', '', '', '', '', ''],
+    ['情境分析', '', '', '', '', ''],
+    ['保守情境 (技師-1, 客單價-200)', '', '', '', '', ''],
+    ['樂觀情境 (技師+1, 客單價+300)', '', '', '', '', ''],
+    ['極端情境 (技師+2, 客單價+500)', '', '', '', '', '']
+  ];
+  
+  const ws2 = XLSX.utils.aoa_to_sheet(sensitivityData);
+  ws2['!cols'] = [
+    {wch: 25}, {wch: 12}, {wch: 12}, {wch: 15}, {wch: 15}, {wch: 12}
+  ];
+  
+  XLSX.utils.book_append_sheet(wb, ws2, '敏感度分析');
+  
+  // 下載Excel檔案
+  XLSX.writeFile(wb, '美業共享工作室財務報表_2025.xlsx');
+}
+
+function calculate(){
+  // 讀取輸入值
+  const technicians = t('technicians'),
+        clientsPerTech = t('clientsPerTech'),
+        pricePerClient = t('pricePerClient'),
+        publicCourses = t('publicCourses'),
+        studentsPerPublic = t('studentsPerPublic'),
+        mixedCourses = t('mixedCourses'),
+        companyStudents = t('companyStudents'),
+        courseFee = t('courseFee'),
+        privateDays = t('privateDays'),
+        classroomRent = t('classroomRent'),
+        nailDesks = t('nailDesks'),
+        nailDeskRent = t('nailDeskRent'),
+        beds = t('beds'),
+        bedRent = t('bedRent'),
+        boxes = t('boxes'),
+        boxRent = t('boxRent'),
+        parkingSpots = t('parkingSpots'),
+        parkingRent = t('parkingRent'),
+        rent = t('rent'),
+        parkingFee = t('parkingFee'),
+        waterBill = t('waterBill'),
+        electricBill = t('electricBill'),
+        internetBill = t('internetBill'),
+        accountingFee = t('accountingFee'),
+        cleaningFee = t('cleaningFee'),
+        insurance = t('insurance'),
+        maintenance = t('maintenance'),
+        marketingExpense = t('marketingExpense'),
+        miscExpense = t('miscExpense');
+
+  // 收入計算
+  const rentalIncome = nailDesks*nailDeskRent + beds*bedRent + boxes*boxRent + parkingSpots*parkingRent;
+  const clientRevenue = Math.floor(technicians * clientsPerTech * pricePerClient * (3/7));
+  const publicCourseRevenue = Math.floor(publicCourses * studentsPerPublic * courseFee * (3/7));
+  const mixedCourseRevenue = Math.floor(mixedCourses * companyStudents * courseFee * (3/7)) + (mixedCourses * 2 * classroomRent /2);
+  const privateClassRent = privateDays * classroomRent;
+
+  const totalRevenue = rentalIncome + clientRevenue + publicCourseRevenue + mixedCourseRevenue + privateClassRent;
+
+  // 儲存計算結果到全域變數
+  currentResults = {
+    rentalIncome,
+    clientRevenue,
+    publicCourseRevenue,
+    mixedCourseRevenue,
+    privateClassRent,
+    totalRevenue
+  };
+
+  // 支出計算
+  const totalCost = rent + parkingFee + waterBill + electricBill + internetBill + 
+                   accountingFee + cleaningFee + insurance + maintenance + 
+                   marketingExpense + miscExpense;
+  const netProfit = totalRevenue - totalCost;
+  
+  // 先扣除行銷分潤20%
+  const marketingBonus = Math.floor(netProfit * 0.20);
+  const remainingProfit = netProfit - marketingBonus;
+  
+  // 剩餘利潤按股權分配
+  const share95 = Math.floor(remainingProfit * 0.95);
+  const share5 = Math.floor(remainingProfit * 0.05);
+  const youTotal = share5 + marketingBonus;
+
+  // 更新全域變數
+  currentResults = {
+    ...currentResults,
+    totalCost,
+    netProfit,
+    marketingBonus,
+    remainingProfit,
+    share95,
+    share5,
+    youTotal
+  };
+
+  // 顯示結果
+  document.getElementById('incomeBox').innerHTML = `
+    <h3>📈 收入</h3>
+    <p>公司分租收入：${rentalIncome.toLocaleString()} 元</p>
+    <p>來電客公司分潤(3/7)：${clientRevenue.toLocaleString()} 元</p>
+    <p>課程收入（公流量＋混合，3/7抽成）：${(publicCourseRevenue+mixedCourseRevenue).toLocaleString()} 元</p>
+    <p>教室租金（私流量）：${privateClassRent.toLocaleString()} 元</p>
+    <p class="highlight">總營收：${totalRevenue.toLocaleString()} 元</p>
+  `;
+
+  document.getElementById('expenseBox').innerHTML = `
+    <h3>📉 支出明細</h3>
+    <p>房租：${rent.toLocaleString()} 元</p>
+    <p>車位費：${parkingFee.toLocaleString()} 元</p>
+    <p>水費：${waterBill.toLocaleString()} 元</p>
+    <p>電費：${electricBill.toLocaleString()} 元</p>
+    <p>網路費：${internetBill.toLocaleString()} 元</p>
+    <p>會計費：${accountingFee.toLocaleString()} 元</p>
+    <p>清潔費：${cleaningFee.toLocaleString()} 元</p>
+    <p>保險費：${insurance.toLocaleString()} 元</p>
+    <p>設備維護費：${maintenance.toLocaleString()} 元</p>
+    <p>廣告耗材：${marketingExpense.toLocaleString()} 元</p>
+    <p>其他雜支：${miscExpense.toLocaleString()} 元</p>
+    <p class="highlight">總支出：${totalCost.toLocaleString()} 元</p>
+  `;
+
+  document.getElementById('profitBox').innerHTML = `
+    <h3>💰 盈餘與分潤流程</h3>
+    
+    <div class="step-title">📊 第1步：計算稅後淨利</div>
+    <div class="profit-step">稅後淨利：${netProfit.toLocaleString()} 元</div>
+    
+    <div class="step-title">🎯 第2步：先扣除行銷分潤</div>
+    <div class="profit-step">行銷分潤(20%)：${marketingBonus.toLocaleString()} 元</div>
+    <div class="profit-step">剩餘利潤：${remainingProfit.toLocaleString()} 元</div>
+    
+    <div class="step-title">👥 第3步：按股權分配剩餘利潤</div>
+    <div class="profit-step">梅鈴分紅(95%)：${share95.toLocaleString()} 元</div>
+    <div class="profit-step">蔡＋子菲分紅(5%)：${share5.toLocaleString()} 元</div>
+    
+    <div class="final-result">
+      🎉 濬瑒＋子菲總收益：${youTotal.toLocaleString()} 元<br>
+      <small>(股權分紅 + 行銷分潤)</small>
+    </div>
+    
+    <div class="meiling-result">
+      👑 梅鈴總收益：${share95.toLocaleString()} 元<br>
+      <small>(95% 股權分紅)</small>
+    </div>
+  `;
+
+}
+
+function sensitivityAnalysis() {
+  // 讀取調整參數
+  const techAdjust = t('techAdjust');
+  const priceAdjust = t('priceAdjust');
+  const courseAdjust = t('courseAdjust');
+  
+  // 讀取原始參數
+  const originalTech = t('technicians');
+  const originalPrice = t('pricePerClient');
+  const originalCourses = t('publicCourses');
+  
+  // 計算調整後收入
+  const originalClientRevenue = Math.floor(originalTech * t('clientsPerTech') * originalPrice * (3/7));
+  const adjustedClientRevenue = Math.floor(techAdjust * t('clientsPerTech') * priceAdjust * (3/7));
+  
+  const originalCourseRevenue = Math.floor(originalCourses * t('studentsPerPublic') * t('courseFee') * (3/7));
+  const adjustedCourseRevenue = Math.floor(courseAdjust * t('studentsPerPublic') * t('courseFee') * (3/7));
+  
+  // 其他收入保持不變
+  const rentalIncome = t('nailDesks')*t('nailDeskRent') + t('beds')*t('bedRent') + t('boxes')*t('boxRent') + t('parkingSpots')*t('parkingRent');
+  const privateClassRent = t('privateDays') * t('classroomRent');
+  
+  // 計算總收入差異
+  const originalTotalRevenue = rentalIncome + originalClientRevenue + originalCourseRevenue + privateClassRent;
+  const adjustedTotalRevenue = rentalIncome + adjustedClientRevenue + adjustedCourseRevenue + privateClassRent;
+  
+  // 計算分潤差異
+  const totalCost = t('rent') + t('parkingFee') + t('waterBill') + t('electricBill') + t('internetBill') + 
+                   t('accountingFee') + t('cleaningFee') + t('insurance') + t('maintenance') + 
+                   t('marketingExpense') + t('miscExpense');
+  
+  const originalNetProfit = originalTotalRevenue - totalCost;
+  const adjustedNetProfit = adjustedTotalRevenue - totalCost;
+  
+  const originalMarketingBonus = Math.floor(originalNetProfit * 0.20);
+  const adjustedMarketingBonus = Math.floor(adjustedNetProfit * 0.20);
+  
+  const originalRemainingProfit = originalNetProfit - originalMarketingBonus;
+  const adjustedRemainingProfit = adjustedNetProfit - adjustedMarketingBonus;
+  
+  const originalYouTotal = Math.floor(originalRemainingProfit * 0.05) + originalMarketingBonus;
+  const adjustedYouTotal = Math.floor(adjustedRemainingProfit * 0.05) + adjustedMarketingBonus;
+  
+  const difference = adjustedYouTotal - originalYouTotal;
+  const percentChange = originalYouTotal > 0 ? ((difference / originalYouTotal) * 100) : 0;
+  
+  document.getElementById('sensitivityResults').innerHTML = `
+    <div class="sensitivity-card">
+      <h4>📊 敏感度分析結果</h4>
+      <div class="comparison-row">
+        <span>原始參數：</span>
+        <span>技師${originalTech}人，客單價${originalPrice}元，課程${originalCourses}場</span>
+      </div>
+      <div class="comparison-row">
+        <span>調整參數：</span>
+        <span>技師${techAdjust}人，客單價${priceAdjust}元，課程${courseAdjust}場</span>
+      </div>
+      <div class="comparison-row">
+        <span>原始總收益：</span>
+        <span>${originalYouTotal.toLocaleString()} 元</span>
+      </div>
+      <div class="comparison-row">
+        <span>調整後總收益：</span>
+        <span>${adjustedYouTotal.toLocaleString()} 元</span>
+      </div>
+      <div class="comparison-row">
+        <span>收益變化：</span>
+        <span style="color: ${difference >= 0 ? '#059669' : '#dc2626'}; font-weight: bold;">
+          ${difference >= 0 ? '+' : ''}${difference.toLocaleString()} 元 (${percentChange >= 0 ? '+' : ''}${percentChange.toFixed(1)}%)
+        </span>
+      </div>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
