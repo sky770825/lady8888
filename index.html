@@ -1232,6 +1232,23 @@
         </div>
     </div>
 
-    <script src="script.js?v=2.5" async></script>
+    <script src="script.js?v=2.6"></script>
+    
+    <!-- 緊急修復：確保載入動畫消失 -->
+    <script>
+        // 備用載入動畫隱藏邏輯
+        setTimeout(function() {
+            const loading = document.getElementById('loading');
+            if (loading && !loading.classList.contains('hidden')) {
+                console.log('緊急隱藏載入動畫');
+                loading.classList.add('hidden');
+                setTimeout(() => {
+                    if (loading.parentNode) {
+                        loading.remove();
+                    }
+                }, 300);
+            }
+        }, 3000);
+    </script>
 </body>
 </html>

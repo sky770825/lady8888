@@ -1,5 +1,5 @@
 // 2025年現代化美業網站互動功能 - 無障礙優化版
-document.addEventListener('DOMContentLoaded', function() {
+function initializeWebsite() {
     console.log('網站載入完成，開始初始化功能...');
     
     try {
@@ -36,7 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
             Sentry.captureException(error);
         }
     }
-});
+}
+
+// 處理異步載入的情況
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWebsite);
+} else {
+    // 如果DOM已經載入完成，立即執行
+    initializeWebsite();
+}
 
 // 初始化EmailJS - 異步載入優化
 function initEmailJS() {
@@ -64,29 +72,36 @@ function initEmailJS() {
     }
 }
 
-// 載入動畫 - 優化載入時間
+// 載入動畫 - 修復卡住問題
 function initLoading() {
     const loading = document.getElementById('loading');
     
-    // 檢查關鍵資源是否已載入
-    function checkResourcesLoaded() {
-        const stylesLoaded = document.styleSheets.length > 0;
-        const fontsLoaded = document.fonts ? document.fonts.ready : Promise.resolve();
-        
-        return Promise.all([
-            stylesLoaded,
-            fontsLoaded
-        ]);
+    if (!loading) {
+        console.warn('載入動畫元素未找到');
+        return;
     }
     
-    // 使用Promise.race確保最多等待1.5秒
-    Promise.race([
-        checkResourcesLoaded(),
-        new Promise(resolve => setTimeout(resolve, 1500))
-    ]).then(() => {
+    // 簡化載入邏輯，避免複雜的Promise處理
+    const hideLoading = () => {
         loading.classList.add('hidden');
-        setTimeout(() => loading.remove(), 300);
-    });
+        setTimeout(() => {
+            if (loading.parentNode) {
+                loading.remove();
+            }
+        }, 300);
+    };
+    
+    // 檢查頁面是否已經完全載入
+    if (document.readyState === 'complete') {
+        hideLoading();
+        return;
+    }
+    
+    // 監聽頁面載入完成
+    window.addEventListener('load', hideLoading);
+    
+    // 備用計時器，確保載入動畫不會永遠顯示
+    setTimeout(hideLoading, 2000);
 }
 
 // 主題切換功能
