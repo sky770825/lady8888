@@ -3409,9 +3409,9 @@ ul, ol {
     }
     
     .hero-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--spacing-3);
-        max-width: 300px;
+        max-width: 100%;
     }
     
     .hero-buttons {
@@ -3804,9 +3804,9 @@ ul, ol {
     }
     
     .hero-stats {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-3);
-        max-width: 300px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-2);
+        max-width: 100%;
     }
     
     .hero-buttons {
