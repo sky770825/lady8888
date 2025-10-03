@@ -1697,10 +1697,12 @@ ul, ol {
 }
 
 .rental-price .period {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     opacity: 0.9;
     font-weight: 600;
     color: var(--text-secondary);
+    text-align: right;
+    align-self: flex-end;
 }
 
 .rental-content {
@@ -1723,13 +1725,15 @@ ul, ol {
     list-style: none;
     margin-bottom: var(--spacing-md);
     flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
 }
 
 .rental-features li {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
     color: var(--text-secondary);
     font-size: 0.95rem;
 }
@@ -2023,13 +2027,20 @@ ul, ol {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--spacing-md);
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
 /* 響應式服務網格佈局 */
+@media (max-width: 1400px) {
+    .services-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1200px;
+    }
+}
+
 @media (max-width: 1200px) {
     .services-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -2464,23 +2475,20 @@ ul, ol {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: var(--spacing-lg);
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
 }
 
 /* 響應式特色網格佈局 */
-@media (max-width: 1200px) {
-    .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 900px) {
     .features-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        max-width: 600px;
     }
 }
 
@@ -3530,7 +3538,6 @@ ul, ol {
     
     .rental-features li {
         font-size: var(--text-xs);
-        margin-bottom: var(--spacing-1);
     }
     
     .rental-price .price {
@@ -3538,7 +3545,7 @@ ul, ol {
     }
     
     .rental-price .period {
-        font-size: var(--text-sm);
+        font-size: 1.1rem;
     }
     
     .rental-card {
@@ -3820,9 +3827,23 @@ ul, ol {
     }
     
     .footer-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         text-align: center;
         gap: var(--spacing-lg);
+    }
+    
+    /* 手機版頁尾特殊佈局：讓分租方案和快速連結並排 */
+    .footer-section:nth-child(1) {
+        grid-column: 1 / -1; /* 品牌資訊跨越兩欄 */
+    }
+    
+    .footer-section:nth-child(2),
+    .footer-section:nth-child(3) {
+        grid-column: auto; /* 分租方案和快速連結各佔一欄 */
+    }
+    
+    .footer-section:nth-child(4) {
+        grid-column: 1 / -1; /* 聯絡資訊跨越兩欄 */
     }
     
     .footer-contact p {
@@ -3876,7 +3897,6 @@ ul, ol {
     
     .rental-features li {
         font-size: 0.9rem;
-        margin-bottom: var(--spacing-xs);
     }
     
     .showcase-item {
