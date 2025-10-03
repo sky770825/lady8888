@@ -8,6 +8,9 @@
     <meta name="keywords" content="美業,共享工作室,分租空間,美髮,美甲,美容,化妝,租賃,創業">
     <meta name="author" content="美業共享工作室">
     
+    <!-- 性能優化提示 -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://beauty-studio.com/">
@@ -31,14 +34,27 @@
     <!-- 預載入關鍵資源 -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" as="script">
+    
+    <!-- DNS預解析 -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//i.postimg.cc">
+    <link rel="dns-prefetch" href="//images.unsplash.com">
+    
+    <!-- 預載入關鍵圖片 -->
+    <link rel="preload" as="image" href="https://i.postimg.cc/GpNw1P6Q/S-23011429-0.jpg">
+    <link rel="preload" as="image" href="https://i.postimg.cc/Ghr0rmgZ/S-23011436-0.jpg">
     
     <!-- 樣式表 -->
     <link rel="stylesheet" href="styles.css?v=2.5">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     
-    <!-- EmailJS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- EmailJS - 異步載入 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" async></script>
     
     <!-- 結構化數據 -->
     <script type="application/ld+json">
@@ -1216,6 +1232,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=2.5"></script>
+    <script src="script.js?v=2.5" async></script>
 </body>
 </html>

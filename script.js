@@ -3,23 +3,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('網站載入完成，開始初始化功能...');
     
     try {
+        // 關鍵功能 - 立即初始化
         initLoading();
-        initThemeToggle();
         initNavigation();
-        initScrollEffects();
-        initHeroAnimations();
-        initServiceFilter();
-        initServiceGallery();
-        initGallery();
-        initTestimonials();
-        initContactForm();
         initBackToTop();
-        initScrollAnimations();
-        initEmailJS();
-        initAccessibility();
-        initImageLazyLoading();
         
-        console.log('所有功能初始化完成');
+        // 延遲初始化非關鍵功能
+        setTimeout(() => {
+            initThemeToggle();
+            initScrollEffects();
+            initHeroAnimations();
+            initScrollAnimations();
+            initAccessibility();
+            initImageLazyLoading();
+        }, 100);
+        
+        // 進一步延遲初始化複雜功能
+        setTimeout(() => {
+            initServiceFilter();
+            initServiceGallery();
+            initGallery();
+            initTestimonials();
+            initContactForm();
+            initEmailJS();
+        }, 300);
+        
+        console.log('核心功能初始化完成，其他功能延遲載入');
     } catch (error) {
         console.error('初始化過程中發生錯誤:', error);
         // 錯誤追蹤 (可整合 Sentry)
@@ -29,19 +38,55 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// 初始化EmailJS
+// 初始化EmailJS - 異步載入優化
 function initEmailJS() {
-    // EmailJS Public Key
-    emailjs.init("KomhlkEK2lewNA7kM");
+    // 檢查EmailJS是否已載入
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init("KomhlkEK2lewNA7kM");
+        console.log('EmailJS 初始化完成');
+    } else {
+        // 如果EmailJS尚未載入，等待載入完成
+        const checkEmailJS = setInterval(() => {
+            if (typeof emailjs !== 'undefined') {
+                emailjs.init("KomhlkEK2lewNA7kM");
+                console.log('EmailJS 延遲初始化完成');
+                clearInterval(checkEmailJS);
+            }
+        }, 100);
+        
+        // 最多等待5秒
+        setTimeout(() => {
+            clearInterval(checkEmailJS);
+            if (typeof emailjs === 'undefined') {
+                console.warn('EmailJS 載入超時');
+            }
+        }, 5000);
+    }
 }
 
-// 載入動畫
+// 載入動畫 - 優化載入時間
 function initLoading() {
     const loading = document.getElementById('loading');
-    setTimeout(() => {
+    
+    // 檢查關鍵資源是否已載入
+    function checkResourcesLoaded() {
+        const stylesLoaded = document.styleSheets.length > 0;
+        const fontsLoaded = document.fonts ? document.fonts.ready : Promise.resolve();
+        
+        return Promise.all([
+            stylesLoaded,
+            fontsLoaded
+        ]);
+    }
+    
+    // 使用Promise.race確保最多等待1.5秒
+    Promise.race([
+        checkResourcesLoaded(),
+        new Promise(resolve => setTimeout(resolve, 1500))
+    ]).then(() => {
         loading.classList.add('hidden');
-        setTimeout(() => loading.remove(), 500);
-    }, 3000);
+        setTimeout(() => loading.remove(), 300);
+    });
 }
 
 // 主題切換功能
