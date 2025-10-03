@@ -1171,8 +1171,38 @@ function initFormValidation() {
     }
 }
 
+// 分租方案滾動功能
+function initRentalScroll() {
+    const rentalGrid = document.querySelector('.rental-grid');
+    if (!rentalGrid) return;
+    
+    // 在手機版時，滾動到中間的月租方案
+    function scrollToFeatured() {
+        if (window.innerWidth <= 768) {
+            const featuredCard = rentalGrid.querySelector('.rental-card.featured');
+            if (featuredCard) {
+                const containerWidth = rentalGrid.offsetWidth;
+                const cardWidth = featuredCard.offsetWidth;
+                const scrollPosition = featuredCard.offsetLeft - (containerWidth - cardWidth) / 2;
+                
+                rentalGrid.scrollTo({
+                    left: Math.max(0, scrollPosition),
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }
+    
+    // 初始化時滾動到特色卡片
+    setTimeout(scrollToFeatured, 500);
+    
+    // 視窗大小改變時重新滾動
+    window.addEventListener('resize', scrollToFeatured);
+}
+
 // 網站初始化完成
 
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
+    initRentalScroll();
 });

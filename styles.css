@@ -3358,27 +3358,38 @@ ul, ol {
     }
     
     .rental-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto auto;
+        display: flex;
+        overflow-x: auto;
         gap: var(--spacing-lg);
-        max-width: 100%;
+        padding: var(--spacing-sm) 0;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) transparent;
     }
     
-    /* 手機版特殊佈局：時租方案在左邊，月租方案在右邊，日租方案在中間下方 */
-    .rental-hourly {
-        grid-column: 1;
-        grid-row: 1;
+    .rental-grid::-webkit-scrollbar {
+        height: 6px;
     }
     
-    .rental-monthly {
-        grid-column: 2;
-        grid-row: 1;
+    .rental-grid::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 3px;
     }
     
-    .rental-daily {
-        grid-column: 1 / -1;  /* 跨越兩欄 */
-        grid-row: 2;
+    .rental-grid::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 3px;
+    }
+    
+    .rental-grid::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dark);
+    }
+    
+    .rental-card {
+        flex: 0 0 280px;
+        scroll-snap-align: start;
+        margin: 0;
     }
     
     .space-types-grid {
