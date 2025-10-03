@@ -601,19 +601,20 @@ ul, ol {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80px;
+    height: 70px;
 }
 
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: var(--spacing-3);
-    font-size: var(--text-2xl);
-    font-weight: 800;
-    color: var(--text-primary);
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
     font-family: var(--font-display);
     transition: var(--transition-colors);
     position: relative;
+    flex-shrink: 0;
 }
 
 .nav-logo:hover {
@@ -622,76 +623,77 @@ ul, ol {
 }
 
 .nav-logo i {
-    font-size: 2.5rem;
-    background: var(--gradient-gold);
+    font-size: 2rem;
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 2px 8px rgba(212, 165, 116, 0.3));
+    filter: drop-shadow(0 2px 8px rgba(218, 165, 32, 0.3));
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: var(--spacing-8);
+    gap: var(--spacing-sm);
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     color: var(--text-primary);
-    font-weight: 600;
-    font-size: var(--text-lg);
-    padding: var(--spacing-3) var(--spacing-5);
-    border-radius: var(--radius-xl);
-    transition: var(--transition-all);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    min-height: 36px;
+    min-width: 70px;
+    background: transparent;
+    border: 1px solid transparent;
 }
 
 .nav-link::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: var(--gradient-primary);
-    opacity: 0.1;
-    transition: left 0.6s;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    border-radius: var(--radius-md);
+    z-index: -1;
 }
 
 .nav-link:hover::before {
-    left: 0;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 3px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-full);
-    transition: width var(--transition-normal);
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-    width: 80%;
+    opacity: 0.1;
 }
 
 .nav-link:hover {
     color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .nav-link.active {
-    color: var(--primary-color);
-    background: rgba(102, 126, 234, 0.1);
+    color: var(--white);
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-link.active::before {
+    opacity: 1;
 }
 
 .hamburger {
@@ -867,38 +869,6 @@ ul, ol {
     position: relative;
 }
 
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-3);
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    padding: var(--spacing-3) var(--spacing-6);
-    border-radius: var(--radius-full);
-    border: 1px solid var(--glass-border);
-    color: var(--white);
-    font-weight: 700;
-    font-size: var(--text-lg);
-    margin-bottom: var(--spacing-8);
-    animation: float 3s ease-in-out infinite;
-    box-shadow: var(--glass-shadow);
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-badge::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.2) 50%, 
-        transparent 100%);
-    animation: shimmer 3s infinite;
-}
 
 .hero-title {
     font-size: var(--text-6xl);
@@ -1036,21 +1006,26 @@ ul, ol {
 .hero-showcase {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-md);
-    max-width: 400px;
+    gap: var(--spacing-sm);
+    max-width: 450px;
 }
 
 .showcase-item {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
     text-align: center;
     transition: all var(--transition-normal);
     cursor: pointer;
     animation: slideInRight 1s ease-out;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     user-select: none;
 }
 
@@ -1088,14 +1063,18 @@ ul, ol {
 }
 
 .showcase-item h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
     margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .showcase-item p {
-    font-size: 0.9rem;
+    font-size: var(--font-size-xs);
     opacity: 0.8;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 @keyframes slideInLeft {
@@ -1170,19 +1149,44 @@ ul, ol {
 }
 
 .btn-primary {
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    background: var(--gradient-gold);
     color: var(--white);
-    box-shadow: var(--shadow-md);
-    border: none;
+    box-shadow: var(--shadow-gold);
+    border: 2px solid var(--primary-color);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+    transition: left 0.6s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    background: var(--gradient-accent);
+    border-color: var(--accent-color);
 }
 
 .btn-secondary {
@@ -1561,43 +1565,6 @@ ul, ol {
     color: var(--white);
 }
 
-.achievements {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.achievement-item {
-    text-align: center;
-    padding: var(--spacing-lg);
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    transition: all var(--transition-normal);
-}
-
-.achievement-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-
-.achievement-icon {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-md);
-}
-
-.achievement-item h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
-}
-
-.achievement-item p {
-    color: var(--text-secondary);
-}
 
 /* 分租方案區塊 - 緊湊設計 */
 .rental-section {
@@ -2057,8 +2024,38 @@ ul, ol {
 
 .service-card.hidden {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.8) translateY(20px);
     pointer-events: none;
+}
+
+/* 服務篩選動畫優化 */
+.services-grid {
+    transition: all 0.3s ease;
+}
+
+.service-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+/* 無服務提示樣式 */
+.no-services-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .service-card:hover {
@@ -2067,13 +2064,123 @@ ul, ol {
 }
 
 .service-image {
-    height: 150px;
-    background: linear-gradient(135deg, var(--quinary-color), var(--septenary-color));
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    cursor: pointer;
+}
+
+/* 服務圖片畫廊樣式 */
+.service-gallery {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.main-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-all);
+}
+
+.thumbnail-gallery {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition-all);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.service-gallery:hover .thumbnail-gallery {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.thumbnail {
+    width: 50px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition-all);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 20;
+}
+
+.thumbnail:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.thumbnail.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-all);
+}
+
+.thumbnail:hover img {
+    transform: scale(1.1);
+}
+
+.service-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.service-image:hover img {
+    transform: scale(1.05);
+}
+
+.service-image .gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(218, 165, 32, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    color: var(--text-primary);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.service-image:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.service-image .gallery-overlay i {
+    color: var(--white);
+    font-size: 2rem;
 }
 
 .service-content {
@@ -2346,50 +2453,148 @@ ul, ol {
     background: var(--bg-secondary);
 }
 
+/* 預約表單區塊 */
+.booking-section {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.booking-content {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+.booking-form-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--quaternary-color);
+    max-width: 600px;
+    width: 100%;
+}
+
+
+/* 地圖區域樣式 */
+.contact-map {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--quaternary-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-title {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.map-wrapper {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+    flex: 1;
+    min-height: 300px;
+}
+
+.parking-info {
+    background: var(--gradient-gold);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--text-primary);
+    flex-shrink: 0;
+}
+
+.parking-info h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+}
+
+.parking-info i {
+    color: var(--primary-color);
+    margin-right: var(--spacing-xs);
+}
+
+.parking-info p {
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+}
+
+.parking-info strong {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-bold);
+}
+
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xxl);
+    align-items: stretch;
+    align-content: start;
 }
 
 .contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+    align-content: start;
+    height: fit-content;
 }
 
 .contact-card {
     display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-primary);
+    border: 1px solid var(--quaternary-color);
+    border-radius: var(--radius-md);
     transition: all var(--transition-normal);
+    min-height: 60px;
+    box-shadow: var(--shadow-sm);
 }
 
 .contact-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+    background: var(--bg-gold);
 }
 
 .contact-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--radius-md);
-    background: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--white);
-    font-size: 1.5rem;
+    font-size: var(--font-size-sm);
     flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
 }
 
 .contact-details h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
@@ -2397,7 +2602,8 @@ ul, ol {
 
 .contact-details p {
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.4;
+    font-size: 0.9rem;
 }
 
 .contact-details p strong {
@@ -2481,9 +2687,10 @@ ul, ol {
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
+    align-items: start;
 }
 
 .footer-section h4 {
@@ -2530,6 +2737,21 @@ ul, ol {
 
 .footer-section ul li a:hover {
     color: var(--primary-color);
+}
+
+.footer-contact p {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: #CCCCCC;
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.95rem;
+}
+
+.footer-contact i {
+    color: var(--primary-color);
+    width: 16px;
+    text-align: center;
 }
 
 .social-links {
@@ -2666,13 +2888,14 @@ ul, ol {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
-    z-index: 10000;
+    z-index: 99999;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .lightbox.show {
-    display: flex;
+    display: flex !important;
     animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -2680,6 +2903,7 @@ ul, ol {
     max-width: 90%;
     max-height: 90%;
     position: relative;
+    cursor: default;
 }
 
 .lightbox-image {
@@ -2722,6 +2946,53 @@ ul, ol {
 
 .lightbox-close:hover {
     color: var(--primary-color);
+}
+
+/* 燈箱導航按鈕 */
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: var(--white);
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-all);
+    z-index: 30;
+    opacity: 0.8;
+}
+
+.lightbox-nav:hover {
+    background: rgba(0, 0, 0, 0.9);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-prev {
+    left: 20px;
+}
+
+.lightbox-next {
+    right: 20px;
+}
+
+.lightbox-counter {
+    margin-top: var(--spacing-sm);
+    font-size: 0.9rem;
+    color: #CCCCCC;
+    font-weight: 500;
+}
+
+.lightbox-counter .current-image {
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
 /* 響應式設計 */
@@ -2974,12 +3245,54 @@ ul, ol {
     }
     
     .service-image {
-        height: 100px;
-        font-size: 1.8rem;
+        height: 150px;
     }
     
     .service-content {
         padding: var(--spacing-3);
+    }
+    
+    /* 手機端縮圖優化 */
+    .thumbnail-gallery {
+        opacity: 1;
+        pointer-events: auto;
+        padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    }
+    
+    .thumbnail {
+        width: 45px;
+        height: 35px;
+        border-radius: var(--radius-xs);
+        position: relative;
+        z-index: 20;
+    }
+    
+    .service-gallery:hover .thumbnail-gallery {
+        opacity: 1;
+    }
+    
+    /* 手機端觸控優化 */
+    .thumbnail {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+    }
+    
+    .main-image {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
     }
     
     .service-content h3 {
@@ -3011,12 +3324,37 @@ ul, ol {
     }
     
     .service-image {
-        height: 120px;
-        font-size: 2rem;
+        height: 180px;
     }
     
     .service-content {
         padding: var(--spacing-sm);
+    }
+    
+    /* 小螢幕手機縮圖優化 */
+    .thumbnail-gallery {
+        opacity: 1;
+        pointer-events: auto;
+        padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        gap: var(--spacing-xs);
+    }
+    
+    .thumbnail {
+        width: 40px;
+        height: 30px;
+        border-radius: var(--radius-xs);
+        border-width: 1px;
+        position: relative;
+        z-index: 20;
+    }
+    
+    .thumbnail.active {
+        border-width: 2px;
+    }
+    
+    .service-gallery:hover .thumbnail-gallery {
+        opacity: 1;
     }
     
     .service-content h3 {
@@ -3103,6 +3441,11 @@ ul, ol {
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .footer-contact p {
+        justify-content: center;
     }
     
     .social-links {
@@ -3252,4 +3595,113 @@ ul, ol {
 ::-moz-selection {
     background: var(--primary-color);
     color: var(--white);
+}
+
+/* 聯絡區塊響應式設計 */
+@media (max-width: 768px) {
+    .booking-form-container {
+        padding: var(--spacing-lg);
+        max-width: 100%;
+    }
+    
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .contact-info {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .map-container {
+        padding: var(--spacing-lg);
+    }
+    
+    .map-wrapper iframe {
+        height: 300px;
+    }
+    
+    .parking-info {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-form-container {
+        padding: var(--spacing-md);
+    }
+    
+    .contact-info {
+        gap: var(--spacing-sm);
+    }
+    
+    .map-container {
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+    }
+    
+    .map-title {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .map-wrapper iframe {
+        height: 250px;
+    }
+    
+    .parking-info {
+        padding: var(--spacing-sm);
+    }
+    
+    /* 手機端燈箱優化 */
+    .lightbox-content {
+        max-width: 95%;
+        max-height: 95%;
+        margin: var(--spacing-sm);
+    }
+    
+    .lightbox-image {
+        height: 300px;
+        border-radius: var(--radius-md);
+    }
+    
+    .lightbox-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .lightbox-info p {
+        font-size: 0.9rem;
+    }
+    
+    .lightbox-close {
+        top: -40px;
+        right: 0;
+        font-size: 1.5rem;
+        padding: var(--spacing-sm);
+    }
+    
+    /* 手機端燈箱導航按鈕 */
+    .lightbox-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .lightbox-prev {
+        left: 10px;
+    }
+    
+    .lightbox-next {
+        right: 10px;
+    }
+    
+    .lightbox-counter {
+        font-size: 0.8rem;
+    }
+    
+    .parking-info h4 {
+        font-size: var(--font-size-md);
+    }
 }

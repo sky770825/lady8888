@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initScrollEffects();
         initHeroAnimations();
         initServiceFilter();
+        initServiceGallery();
         initGallery();
         initTestimonials();
         initContactForm();
@@ -225,35 +226,184 @@ function initHeroAnimations() {
     }, 3000);
 }
 
-// 服務篩選功能
+// 服務篩選功能 - 優化版：動態排序
 function initServiceFilter() {
     const filterBtns = document.querySelectorAll('.filter-btn');
+    const servicesGrid = document.querySelector('.services-grid');
     const serviceCards = document.querySelectorAll('.service-card');
+    
+    // 儲存原始順序
+    const originalCards = Array.from(serviceCards);
     
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
             
+            // 更新按鈕狀態
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
+            // 篩選卡片
+            let filteredCards;
+            if (filter === 'all') {
+                filteredCards = originalCards;
+            } else {
+                filteredCards = originalCards.filter(card => 
+                    card.getAttribute('data-category') === filter
+                );
+            }
+            
+            // 動畫隱藏所有卡片
             serviceCards.forEach(card => {
-                const category = card.getAttribute('data-category');
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8) translateY(20px)';
+                card.style.transition = 'all 0.3s ease';
+            });
+            
+            // 重新排序和顯示卡片
+            setTimeout(() => {
+                // 清空網格
+                servicesGrid.innerHTML = '';
                 
-                if (filter === 'all' || category === filter) {
-                    card.classList.remove('hidden');
+                // 重新添加卡片（已排序）
+                filteredCards.forEach((card, index) => {
+                    // 重置卡片樣式
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.8) translateY(20px)';
+                    card.style.transition = 'all 0.3s ease';
+                    
+                    // 添加到網格
+                    servicesGrid.appendChild(card);
+                    
+                    // 延遲動畫顯示
                     setTimeout(() => {
                         card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                    }, 100);
+                        card.style.transform = 'scale(1) translateY(0)';
+                    }, index * 100); // 每個卡片間隔100ms
+                });
+                
+                // 如果沒有匹配的卡片，顯示提示
+                if (filteredCards.length === 0) {
+                    showNoServicesMessage(filter);
                 } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.8)';
-                    setTimeout(() => {
-                        card.classList.add('hidden');
-                    }, 300);
+                    hideNoServicesMessage();
                 }
-            });
+            }, 300);
+        });
+    });
+    
+    // 顯示無服務提示
+    function showNoServicesMessage(filter) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'no-services-message';
+        messageDiv.style.cssText = `
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--primary-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        `;
+        
+        const filterNames = {
+            'hair': '美髮服務',
+            'nail': '美甲服務', 
+            'beauty': '美容服務',
+            'makeup': '化妝服務'
+        };
+        
+        messageDiv.innerHTML = `
+            <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">
+                暫無 ${filterNames[filter] || '此類'} 服務
+            </h3>
+            <p style="color: var(--text-secondary);">
+                我們正在為您準備更多優質的 ${filterNames[filter] || '相關'} 服務，敬請期待！
+            </p>
+        `;
+        
+        servicesGrid.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            messageDiv.style.opacity = '1';
+            messageDiv.style.transform = 'translateY(0)';
+        }, 100);
+    }
+    
+    // 隱藏無服務提示
+    function hideNoServicesMessage() {
+        const existingMessage = servicesGrid.querySelector('.no-services-message');
+        if (existingMessage) {
+            existingMessage.style.opacity = '0';
+            existingMessage.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                existingMessage.remove();
+            }, 300);
+        }
+    }
+}
+
+// 服務縮圖畫廊功能
+function initServiceGallery() {
+    const serviceGalleries = document.querySelectorAll('.service-gallery');
+    
+    serviceGalleries.forEach(gallery => {
+        const mainImage = gallery.querySelector('.main-image img');
+        const thumbnails = gallery.querySelectorAll('.thumbnail');
+        
+        // 為每個縮圖添加點擊和觸控事件
+        thumbnails.forEach(thumbnail => {
+            const handleThumbnailClick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation(); // 阻止事件冒泡到父元素
+                
+                console.log('縮圖被點擊:', thumbnail);
+                
+                const newSrc = thumbnail.getAttribute('data-src');
+                const newAlt = thumbnail.querySelector('img').getAttribute('alt');
+                
+                // 更新主圖片
+                if (mainImage) {
+                    mainImage.src = newSrc;
+                    mainImage.alt = newAlt;
+                }
+                
+                // 更新縮圖狀態
+                thumbnails.forEach(thumb => thumb.classList.remove('active'));
+                thumbnail.classList.add('active');
+                
+                // 添加觸控反饋
+                thumbnail.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    thumbnail.style.transform = '';
+                }, 150);
+            };
+            
+            // 添加點擊事件
+            thumbnail.addEventListener('click', handleThumbnailClick, true); // 使用捕獲階段
+            
+            // 添加觸控事件（防止雙重觸發）
+            let touchStartTime = 0;
+            thumbnail.addEventListener('touchstart', (e) => {
+                touchStartTime = Date.now();
+                e.preventDefault();
+                e.stopPropagation();
+            }, true);
+            
+            thumbnail.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const touchDuration = Date.now() - touchStartTime;
+                if (touchDuration < 500) { // 短觸控
+                    handleThumbnailClick(e);
+                }
+            }, true);
         });
     });
 }
@@ -261,17 +411,96 @@ function initServiceFilter() {
 // 畫廊燈箱功能
 function initGallery() {
     const galleryItems = document.querySelectorAll('.gallery-item, .about-gallery-item');
+    const mainImages = document.querySelectorAll('.main-image');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = lightbox.querySelector('.lightbox-image');
     const lightboxInfo = lightbox.querySelector('.lightbox-info');
     const lightboxClose = lightbox.querySelector('.lightbox-close');
+    const lightboxPrev = lightbox.querySelector('.lightbox-prev');
+    const lightboxNext = lightbox.querySelector('.lightbox-next');
+    const currentImageSpan = lightbox.querySelector('.current-image');
+    const totalImagesSpan = lightbox.querySelector('.total-images');
     
-    galleryItems.forEach(item => {
-        item.addEventListener('click', function() {
+    // 燈箱狀態
+    let currentServiceCard = null;
+    let currentImageIndex = 0;
+    let currentImages = [];
+    
+    console.log('燈箱初始化，找到', galleryItems.length, '個畫廊項目和', mainImages.length, '個主圖片');
+    
+    // 獲取服務卡片的所有圖片
+    function getServiceImages(serviceCard) {
+        const thumbnails = serviceCard.querySelectorAll('.thumbnail');
+        return Array.from(thumbnails).map(thumb => ({
+            src: thumb.getAttribute('data-src'),
+            alt: thumb.querySelector('img').getAttribute('alt')
+        }));
+    }
+    
+    // 更新燈箱圖片
+    function updateLightboxImage(imageData, index) {
+        if (imageData) {
+            lightboxImage.innerHTML = `<img src="${imageData.src}" alt="${imageData.alt}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">`;
+            currentImageIndex = index;
+            currentImageSpan.textContent = index + 1;
+        }
+    }
+    
+    // 顯示上一張圖片
+    function showPreviousImage() {
+        if (currentImages.length > 0) {
+            currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+            updateLightboxImage(currentImages[currentImageIndex], currentImageIndex);
+        }
+    }
+    
+    // 顯示下一張圖片
+    function showNextImage() {
+        if (currentImages.length > 0) {
+            currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+            updateLightboxImage(currentImages[currentImageIndex], currentImageIndex);
+        }
+    }
+    
+    // 測試燈箱功能
+    if (lightbox) {
+        console.log('燈箱元素找到:', lightbox);
+    } else {
+        console.error('燈箱元素未找到!');
+    }
+    
+    galleryItems.forEach((item, index) => {
+        console.log(`為項目 ${index} 添加點擊事件:`, item);
+        
+        const handleImageClick = (e) => {
+            // 檢查是否點擊的是縮圖或縮圖區域
+            if (e.target.closest('.thumbnail') || e.target.closest('.thumbnail-gallery')) {
+                console.log('點擊的是縮圖區域，不觸發燈箱');
+                return;
+            }
+            
+            // 檢查是否點擊的是主圖片本身
+            if (!e.target.closest('.main-image img') && !e.target.closest('.gallery-item img')) {
+                console.log('點擊的不是主圖片，不觸發燈箱');
+                return;
+            }
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('燈箱被點擊:', this);
+            
             let title, description;
             
+            // 檢查是否為服務卡片的圖片
+            if (this.classList.contains('main-image')) {
+                const serviceCard = this.closest('.service-card');
+                title = serviceCard.querySelector('h3').textContent;
+                description = serviceCard.querySelector('p').textContent;
+                console.log('服務卡片圖片:', title, description);
+            }
             // 檢查是否為關於我們區塊的圖片
-            if (this.classList.contains('about-gallery-item')) {
+            else if (this.classList.contains('about-gallery-item')) {
                 title = '專業美業環境';
                 description = '採用2025年最新設計理念，結合玫瑰金與米色配色，營造時尚優雅的氛圍';
             } else {
@@ -284,6 +513,7 @@ function initGallery() {
             if (img) {
                 // 如果有圖片，顯示圖片
                 lightboxImage.innerHTML = `<img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">`;
+                console.log('顯示圖片:', img.src);
             } else {
                 // 如果沒有圖片，顯示圖標
                 const icon = this.querySelector('.gallery-image i').className;
@@ -295,7 +525,132 @@ function initGallery() {
             
             lightbox.classList.add('show');
             document.body.style.overflow = 'hidden';
+            
+            console.log('燈箱已顯示');
+            console.log('燈箱類別:', lightbox.className);
+            console.log('燈箱樣式:', window.getComputedStyle(lightbox).display);
+        };
+        
+        // 添加點擊事件（使用捕獲階段，在縮圖事件之後處理）
+        item.addEventListener('click', handleImageClick, false);
+        
+        // 添加觸控事件（防止雙重觸發）
+        let touchStartTime = 0;
+        item.addEventListener('touchstart', (e) => {
+            // 檢查是否點擊的是縮圖
+            if (e.target.closest('.thumbnail')) {
+                return;
+            }
+            touchStartTime = Date.now();
+            e.preventDefault();
+        }, false);
+        
+        item.addEventListener('touchend', (e) => {
+            // 檢查是否點擊的是縮圖
+            if (e.target.closest('.thumbnail')) {
+                return;
+            }
+            e.preventDefault();
+            const touchDuration = Date.now() - touchStartTime;
+            if (touchDuration < 500) { // 短觸控
+                handleImageClick.call(item, e);
+            }
+        }, false);
+    });
+    
+    // 為主圖片添加專門的點擊處理器
+    mainImages.forEach((mainImage, index) => {
+        console.log(`為主圖片 ${index} 添加點擊事件:`, mainImage);
+        
+        const handleMainImageClick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('主圖片被點擊:', mainImage);
+            
+            let title, description;
+            
+            // 獲取服務卡片信息
+            const serviceCard = mainImage.closest('.service-card');
+            if (serviceCard) {
+                title = serviceCard.querySelector('h3').textContent;
+                description = serviceCard.querySelector('p').textContent;
+                console.log('服務卡片圖片:', title, description);
+                
+                // 初始化燈箱狀態
+                currentServiceCard = serviceCard;
+                currentImages = getServiceImages(serviceCard);
+                currentImageIndex = 0;
+                
+                // 更新總圖片數
+                totalImagesSpan.textContent = currentImages.length;
+                
+                // 顯示第一張圖片
+                if (currentImages.length > 0) {
+                    updateLightboxImage(currentImages[0], 0);
+                }
+            }
+            
+            // 檢查是否有圖片
+            const img = mainImage.querySelector('img');
+            if (img && currentImages.length === 0) {
+                // 如果沒有縮圖，顯示主圖片
+                lightboxImage.innerHTML = `<img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">`;
+                console.log('顯示圖片:', img.src);
+            } else if (currentImages.length === 0) {
+                // 如果沒有圖片，顯示圖標
+                const icon = mainImage.querySelector('.gallery-image i').className;
+                lightboxImage.innerHTML = `<i class="${icon}"></i>`;
+            }
+            
+            lightboxInfo.querySelector('h3').textContent = title;
+            lightboxInfo.querySelector('p').textContent = description;
+            
+            // 顯示/隱藏導航按鈕
+            if (currentImages.length > 1) {
+                lightboxPrev.style.display = 'flex';
+                lightboxNext.style.display = 'flex';
+            } else {
+                lightboxPrev.style.display = 'none';
+                lightboxNext.style.display = 'none';
+            }
+            
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            console.log('燈箱已顯示');
+            console.log('燈箱類別:', lightbox.className);
+            console.log('燈箱樣式:', window.getComputedStyle(lightbox).display);
+        };
+        
+        // 添加點擊事件
+        mainImage.addEventListener('click', handleMainImageClick);
+        
+        // 添加觸控事件
+        let touchStartTime = 0;
+        mainImage.addEventListener('touchstart', (e) => {
+            touchStartTime = Date.now();
+            e.preventDefault();
         });
+        
+        mainImage.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const touchDuration = Date.now() - touchStartTime;
+            if (touchDuration < 500) { // 短觸控
+                handleMainImageClick(e);
+            }
+        });
+    });
+    
+    // 添加導航按鈕事件
+    lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPreviousImage();
+    });
+    
+    lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNextImage();
     });
     
     lightboxClose.addEventListener('click', closeLightbox);
@@ -305,9 +660,52 @@ function initGallery() {
         }
     });
     
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('show')) {
+    // 添加觸控關閉和滑動切換功能
+    let lightboxTouchStartX = 0;
+    let lightboxTouchStartY = 0;
+    
+    lightbox.addEventListener('touchstart', function(e) {
+        lightboxTouchStartX = e.touches[0].clientX;
+        lightboxTouchStartY = e.touches[0].clientY;
+    });
+    
+    lightbox.addEventListener('touchend', function(e) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const touchDistanceX = Math.abs(touchEndX - lightboxTouchStartX);
+        const touchDistanceY = Math.abs(touchEndY - lightboxTouchStartY);
+        
+        // 如果向下滑動超過50px，關閉燈箱
+        if (touchEndY > lightboxTouchStartY && touchDistanceY > 50 && touchDistanceX < 50) {
             closeLightbox();
+        }
+        // 如果左右滑動超過50px，切換圖片
+        else if (touchDistanceX > 50 && touchDistanceY < 50) {
+            if (touchEndX < lightboxTouchStartX) {
+                // 向左滑動，下一張
+                showNextImage();
+            } else if (touchEndX > lightboxTouchStartX) {
+                // 向右滑動，上一張
+                showPreviousImage();
+            }
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (lightbox.classList.contains('show')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    showPreviousImage();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    showNextImage();
+                    break;
+            }
         }
     });
 }
