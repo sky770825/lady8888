@@ -3480,7 +3480,7 @@ ul, ol {
     }
     
     .stat-label {
-        font-size: 0.8rem;
+        font-size: 1.1rem;
         line-height: 1.2;
     }
     
@@ -3532,8 +3532,9 @@ ul, ol {
     }
     
     .hero-showcase {
-        grid-template-columns: 1fr;
-        max-width: 300px;
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
+        gap: var(--spacing-xs);
     }
     
     /* 分租方案響應式 */
@@ -3910,7 +3911,7 @@ ul, ol {
     }
     
     .stat-label {
-        font-size: 0.7rem;
+        font-size: 1rem;
         line-height: 1.1;
     }
     
