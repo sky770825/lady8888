@@ -3401,14 +3401,14 @@ ul, ol {
     }
     
     .hero-stats {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing-4);
-        max-width: 500px;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-3);
+        max-width: 300px;
     }
     
     .hero-buttons {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 400px;
+        grid-template-columns: 1fr;
+        max-width: 300px;
         margin-left: auto;
         margin-right: auto;
     }
