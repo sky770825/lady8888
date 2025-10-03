@@ -1000,10 +1000,14 @@ ul, ol {
 }
 
 .hero-buttons {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-4);
     animation: slideInLeft 1s ease-out 0.8s both;
     margin-top: var(--spacing-4);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-image {
@@ -3403,8 +3407,10 @@ ul, ol {
     }
     
     .hero-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     /* 客戶評價水平滾動 */
@@ -3796,8 +3802,10 @@ ul, ol {
     }
     
     .hero-buttons {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .rental-content {
