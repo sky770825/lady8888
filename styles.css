@@ -897,17 +897,20 @@ ul, ol {
     overflow: hidden;
 }
 
+/* 「美業共享」文字顏色調整 */
+.title-line:not(.highlight) {
+    color: #1A1A1A;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .title-line {
     display: inline;
     margin-right: var(--spacing-2);
 }
 
 .highlight {
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
+    color: #D4A574;
+    text-shadow: 0 2px 4px rgba(212, 165, 116, 0.3);
     position: relative;
 }
 
@@ -918,7 +921,7 @@ ul, ol {
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--gradient-gold);
+    background: #D4A574;
     border-radius: 2px;
     opacity: 0.8;
 }
@@ -1838,12 +1841,13 @@ ul, ol {
 }
 
 .advantages-title {
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
     font-weight: 600;
     color: var(--text-primary);
     text-align: center;
     margin-bottom: var(--spacing-xl);
     font-family: var(--font-display);
+    white-space: nowrap;
 }
 
 .advantages-grid {
@@ -1897,7 +1901,7 @@ ul, ol {
 }
 
 .advantage-item h4 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-sm);
@@ -1906,6 +1910,7 @@ ul, ol {
 .advantage-item p {
     color: var(--text-secondary);
     line-height: 1.6;
+    font-size: 1.0rem;
 }
 
 /* 服務展示區塊 */
@@ -3544,12 +3549,12 @@ ul, ol {
     }
     
     .advantage-item h4 {
-        font-size: var(--text-sm);
+        font-size: 1.0rem;
         margin-bottom: var(--spacing-1);
     }
     
     .advantage-item p {
-        font-size: var(--text-xs);
+        font-size: 0.875rem;
     }
     
     .showcase-item {
@@ -3910,8 +3915,16 @@ ul, ol {
     }
     
     .testimonial-nav {
-        flex-direction: column;
-        gap: var(--spacing-md);
+        flex-direction: row;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
     
     .modal-content {
