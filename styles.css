@@ -1602,9 +1602,12 @@ ul, ol {
 /* 電腦版特殊佈局 */
 @media (min-width: 1024px) {
     .rental-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 0.8fr 1.2fr 0.8fr;
         gap: var(--spacing-xl);
         margin-bottom: var(--spacing-xxl);
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .rental-card.featured {
@@ -3366,38 +3369,35 @@ ul, ol {
     }
     
     .rental-grid {
-        display: flex;
-        overflow-x: auto;
-        gap: var(--spacing-lg);
-        padding: var(--spacing-sm) 0;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        scrollbar-color: var(--primary-color) transparent;
-    }
-    
-    .rental-grid::-webkit-scrollbar {
-        height: 6px;
-    }
-    
-    .rental-grid::-webkit-scrollbar-track {
-        background: var(--bg-secondary);
-        border-radius: 3px;
-    }
-    
-    .rental-grid::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 3px;
-    }
-    
-    .rental-grid::-webkit-scrollbar-thumb:hover {
-        background: var(--primary-dark);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-sm);
+        max-width: 100%;
     }
     
     .rental-card {
-        flex: 0 0 280px;
-        scroll-snap-align: start;
         margin: 0;
+        min-width: 0;
+        padding: var(--spacing-sm);
+    }
+    
+    .rental-card h3 {
+        font-size: 1rem;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .rental-card .rental-content p {
+        font-size: 0.85rem;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .rental-features {
+        gap: 2px;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .rental-features li {
+        font-size: 0.8rem;
     }
     
     .space-types-grid {
@@ -3467,10 +3467,17 @@ ul, ol {
     }
     
     .hero-buttons {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         max-width: 300px;
         margin-left: auto;
         margin-right: auto;
+        gap: var(--spacing-xs);
+    }
+    
+    .hero-buttons .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.85rem;
+        min-width: 0;
     }
     
     /* 客戶評價水平滾動 */
@@ -3518,10 +3525,9 @@ ul, ol {
     }
     
     .rental-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-3);
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-xs);
         max-width: 100%;
-        padding: 0 var(--spacing-sm);
     }
     
     .rental-card {
@@ -3875,10 +3881,17 @@ ul, ol {
     }
     
     .hero-buttons {
-        grid-template-columns: 1fr;
-        max-width: 300px;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 320px;
         margin-left: auto;
         margin-right: auto;
+        gap: var(--spacing-sm);
+    }
+    
+    .hero-buttons .btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+        min-width: 0;
     }
     
     .rental-content {
@@ -3922,13 +3935,17 @@ ul, ol {
     }
     
     .services-filter {
-        flex-direction: column;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--spacing-xs);
+        max-width: 100%;
     }
     
     .filter-btn {
         width: 100%;
-        max-width: 200px;
+        padding: var(--spacing-sm) var(--spacing-xs);
+        font-size: 0.85rem;
+        min-width: 0;
     }
     
     .testimonial-nav {
