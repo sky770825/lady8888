@@ -470,7 +470,7 @@ function initServiceGallery() {
 
 // 畫廊燈箱功能
 function initGallery() {
-    const galleryItems = document.querySelectorAll('.gallery-item, .about-gallery-item');
+    const galleryItems = document.querySelectorAll('.gallery-item, .about-gallery-item, .service-gallery-item');
     const mainImages = document.querySelectorAll('.main-image');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = lightbox.querySelector('.lightbox-image');
@@ -1171,7 +1171,7 @@ function initFormValidation() {
     }
 }
 
-// 移除重複的函數定義，使用上面已定義的版本
+// 網站初始化完成
 
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
