@@ -996,6 +996,7 @@ ul, ol {
     margin-top: var(--spacing-xs);
     font-weight: 500;
     text-transform: uppercase;
+    white-space: nowrap;
     letter-spacing: 0.5px;
 }
 
@@ -1860,7 +1861,7 @@ ul, ol {
 .rental-promotion {
     margin: var(--spacing-xxl) 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
     max-width: 1200px;
     margin-left: auto;
@@ -2783,6 +2784,10 @@ ul, ol {
 /* 預約表單區塊 */
 .booking-section {
     margin-bottom: var(--spacing-xxl);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xxl);
+    align-items: start;
 }
 
 .booking-content {
@@ -2797,7 +2802,7 @@ ul, ol {
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--quaternary-color);
-    max-width: 600px;
+    max-width: 100%;
     width: 100%;
 }
 
@@ -2872,15 +2877,15 @@ ul, ol {
 
 .contact-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xxl);
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
     align-items: stretch;
     align-content: start;
 }
 
 .contact-info {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
     align-content: start;
     height: fit-content;
@@ -3337,15 +3342,43 @@ ul, ol {
         gap: var(--spacing-xl);
     }
     
+    .booking-section {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+    
     .contact-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-xl);
     }
     
-    .rental-grid {
+    .contact-info {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .rental-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
         gap: var(--spacing-lg);
-        max-width: 400px;
+        max-width: 100%;
+    }
+    
+    /* 手機版特殊佈局：時租方案在左邊，月租方案在右邊，日租方案在中間下方 */
+    .rental-hourly {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    
+    .rental-monthly {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    
+    .rental-daily {
+        grid-column: 1 / -1;  /* 跨越兩欄 */
+        grid-row: 2;
     }
     
     .space-types-grid {
@@ -3936,35 +3969,7 @@ ul, ol {
     color: var(--white);
 }
 
-/* 聯絡區塊響應式設計 */
-@media (max-width: 768px) {
-    .booking-form-container {
-        padding: var(--spacing-lg);
-        max-width: 100%;
-    }
-    
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .contact-info {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-    
-    .map-container {
-        padding: var(--spacing-lg);
-    }
-    
-    .map-wrapper iframe {
-        height: 300px;
-    }
-    
-    .parking-info {
-        padding: var(--spacing-md);
-    }
-}
+/* 聯絡區塊響應式設計已合併到上面的768px媒體查詢中 */
 
 @media (max-width: 480px) {
     .booking-form-container {
@@ -4042,5 +4047,23 @@ ul, ol {
     
     .parking-info h4 {
         font-size: var(--font-size-md);
+    }
+    
+    /* 聯絡區塊響應式設計 */
+    .booking-form-container {
+        padding: var(--spacing-lg);
+        max-width: 100%;
+    }
+    
+    .map-container {
+        padding: var(--spacing-lg);
+    }
+    
+    .map-wrapper iframe {
+        height: 300px;
+    }
+    
+    .parking-info {
+        padding: var(--spacing-md);
     }
 }
