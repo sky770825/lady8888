@@ -3392,8 +3392,16 @@ ul, ol {
     }
     
     .hero-content {
+        flex: none;
         max-width: 100%;
         margin-bottom: var(--spacing-xl);
+        order: 1;
+    }
+    
+    .hero-image {
+        flex: none;
+        order: 2;
+        margin-top: var(--spacing-lg);
     }
     
     .hero-title {
