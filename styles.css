@@ -3465,8 +3465,23 @@ ul, ol {
     
     .hero-stats {
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xs);
         max-width: 100%;
+    }
+    
+    .stat-item {
+        padding: var(--spacing-sm);
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+        line-height: 1.2;
     }
     
     .hero-buttons {
@@ -3880,8 +3895,23 @@ ul, ol {
     
     .hero-stats {
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing-xs);
+        gap: 4px;
         max-width: 100%;
+    }
+    
+    .stat-item {
+        padding: var(--spacing-xs);
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+        margin-bottom: 2px;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+        line-height: 1.1;
     }
     
     .hero-buttons {
